@@ -35,7 +35,7 @@
           <h2>Profile Image</h2>
           <img src="{{ freelancer.image.url }}" alt="Profile Image" class="freelancer-image">
         {% else %}
-          <p>No profile image uploaded.</p>
+        <img src="{% static 'images/noprofile.png' %}" alt="Default Image" class="profile-img">
         {% endif %}
 
         <h2>Work Samples</h2>

@@ -1,14 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.models import User
 from django.contrib import messages, auth
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 import random
 
 from .models import *
 from .forms import RegisterForm, FreelancerEditForm
-from .models import Freelancer, WorkImage
-from .forms import FreelancerEditForm
 
 
 def register_view(request):
@@ -117,16 +115,6 @@ def home(request):
 
 
 @login_required
-def contact(request):
-    return render(request, 'contact.html')
-
-
-@login_required
-def how_it_works(request):
-    return render(request, 'how_it_works.html')
-
-
-@login_required
 def categories(request):
     categories = Category.objects.all()
     return render(request, 'categories.html', {'categories': categories})
@@ -144,38 +132,43 @@ def subcategory_detail(request, subcategory_id):
     subcategory = get_object_or_404(SubCategory, id=subcategory_id)
     freelancers = subcategory.freelancers.all()
     return render(request, 'subcategory_detail.html', {'subcategory': subcategory, 'freelancers': freelancers})
-
-
 @login_required
 def join(request):
     if request.method == 'POST':
         name = request.POST.get('name')
         email = request.POST.get('email')
-        category = request.POST.get('category')  # Use directly (CharField)
+        category = request.POST.get('category')
         subcategory_name = request.POST.get('subcategory')
         portfolio_url = request.POST.get('portfolio')
         bio = request.POST.get('bio')
-        images = request.FILES.getlist('work_images')  # Get list of uploaded files
+        profile_image = request.FILES.get('image')
+        work_images = request.FILES.getlist('work_images')
 
         try:
             subcategory = SubCategory.objects.get(name=subcategory_name)
         except SubCategory.DoesNotExist:
             return render(request, 'join.html', {'error': 'Selected subcategory does not exist.'})
 
+        # Check if a freelancer with the same email already exists
+        if Freelancer.objects.filter(email=email).exists():
+            messages.error(request, 'A freelancer with this email already exists. Please use a different email address.')
+            return redirect('join')
+
         freelancer = Freelancer.objects.create(
             name=name,
             email=email,
-            category=category,  # No need to fetch a Category object
+            category=category,
             subcategory=subcategory,
             portfolio_url=portfolio_url,
             bio=bio,
+            image=profile_image
         )
 
-        # Save multiple images
-        for image in images:
-            WorkImage.objects.create(freelancer=freelancer, image=image)
+        for img in work_images:
+            WorkImage.objects.create(freelancer=freelancer, image=img)
 
-        return redirect('home')
+        messages.success(request, 'Freelancer profile created successfully.')
+        return redirect('my_account')
 
     return render(request, 'join.html')
 
@@ -197,13 +190,14 @@ def my_account(request):
 
     if request.method == 'POST':
         if 'work_image' in request.FILES:
-            # Handle work image upload
+            # Handle new work image upload
             image = request.FILES['work_image']
-            WorkImage.objects.create(freelancer=freelancer, image=image)
+            image_obj = FreelancerImage.objects.create(image=image)
+            freelancer.work_images.add(image_obj)
             messages.success(request, 'Work image uploaded successfully.')
             return redirect('my_account')
         else:
-            # Handle profile update
+            # Handle profile edit
             form = FreelancerEditForm(request.POST, request.FILES, instance=freelancer)
             if form.is_valid():
                 form.save()
@@ -218,7 +212,6 @@ def my_account(request):
         'form': form,
         'freelancer': freelancer
     })
-
 
 
 def hire_freelancer(request, freelancer_id):

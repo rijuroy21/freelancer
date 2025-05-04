@@ -23,7 +23,6 @@
         <h1>Join as a Freelancer</h1>
         <p>Showcase your skills and connect with clients worldwide.</p>
     </header>
-
     <section class="freelancer-form">
         <h2>Register as a Freelancer</h2>
         <form action="{% url 'join' %}" method="POST" enctype="multipart/form-data">
@@ -31,10 +30,10 @@
             
             <label for="name">Full Name:</label>
             <input type="text" id="name" name="name" required>
-
+    
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
-
+    
             <label for="category">Select Category:</label>
             <select id="category" name="category" required>
                 <option value="">-- Select a Category --</option>
@@ -44,19 +43,21 @@
                 <option value="Multimedia & Video Designers">Multimedia & Video Designers</option>
                 <option value="Industrial & Product Designers">Industrial & Product Designers</option>
             </select>
-
+    
             <label for="subcategory">Select Subcategory:</label>
             <select id="subcategory" name="subcategory" required>
                 <option value="">-- Select a Subcategory --</option>
             </select>
-
+    
             <label for="portfolio">Portfolio URL:</label>
             <input type="url" id="portfolio" name="portfolio">
-
+    
             <label for="bio">Short Bio:</label>
             <textarea id="bio" name="bio" rows="4" required></textarea>
-
-           
+    
+            <label for="image">Profile Image:</label>
+            <input type="file" id="image" name="image" accept="image/*">
+    
             <label for="work_images">Upload Work Images:</label>
             <div id="image-input-container">
                 <div class="image-input-container">
@@ -64,12 +65,12 @@
                     <button type="button" class="remove-btn" onclick="removeImageInput(this)">Remove</button>
                 </div>
             </div>
-            
             <button type="button" id="add-image-btn">+</button>
-            
+    
             <button type="submit">Join Now</button>
         </form>
     </section>
+    
 
 
     <footer>

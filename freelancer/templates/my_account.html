@@ -24,22 +24,25 @@
     </header>
 
     <section class="profile-section">
-        {% if messages %}
-            {% for message in messages %}
-                <p class="message">{{ message }}</p>
-            {% endfor %}
-        {% endif %}
+      
 
         {% if freelancer %}
-            <div class="profile-info">
-                <p><strong>Name:</strong> {{ freelancer.name }}</p>
-                <p><strong>Email:</strong> {{ freelancer.email }}</p>
-                <p><strong>Category:</strong> {{ freelancer.category }}</p>
-                <p><strong>Subcategory:</strong> {{ freelancer.subcategory }}</p>
-                <p><strong>Portfolio:</strong> <a href="{{ freelancer.portfolio_url }}" target="_blank">View Portfolio</a></p>
-                <p><strong>Bio:</strong> {{ freelancer.bio }}</p>
-            </div>
-
+        <div class="profile-info">
+            {% if freelancer.image %}
+                <p><strong>Profile Image:</strong></p>
+                <img src="{{ freelancer.image.url }}" alt="{{ freelancer.name }}" style="max-width: 200px; margin: 10px;">
+            {% endif %}
+        
+            <p><strong>Name:</strong> {{ freelancer.name }}</p>
+            <p><strong>Email:</strong> {{ freelancer.email }}</p>
+            <p><strong>Category:</strong> {{ freelancer.category }}</p>
+            <p><strong>Subcategory:</strong> {{ freelancer.subcategory }}</p>
+            <p><strong>Portfolio:</strong> 
+                <a href="{{ freelancer.portfolio_url }}" target="_blank">View Portfolio</a>
+            </p>
+            <p><strong>Bio:</strong> {{ freelancer.bio }}</p>
+        </div>
+        
             <!-- Work Image Upload and Gallery -->
             <section class="work-images">
                 <h2>Your Work Images</h2>

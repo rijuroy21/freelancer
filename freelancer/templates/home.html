@@ -33,26 +33,32 @@
       <button id="searchButton">Search</button>
     </div>
   </header>
-
   <main>
     <section class="featured">
       <h2>Featured Professionals</h2>
       <div class="profiles">
         {% for freelancer in freelancers %}
-        <div class="profile">
+          <div class="profile">
+            <!-- Display profile image or fallback -->
+            {% if freelancer.image %}
+              <img src="{{ freelancer.image.url }}" alt="{{ freelancer.name }}" class="profile-img">
+            {% else %}
+              <img src="{% static 'images/noprofile.png' %}" alt="Default Image" class="profile-img">
+            {% endif %}
+            
             <h3>{{ freelancer.name }}</h3>
             <p>{{ freelancer.subcategory }}</p>
             <a href="{% url 'profile' freelancer.id %}"><button>View Profile</button></a>
-        </div>
+          </div>
         {% empty %}
-        <p>No freelancers found.</p>
+          <p>No freelancers found.</p>
         {% endfor %}
       </div>
       
       <button id="goBackButton" style="display: none;" onclick="goBack()">← Back to home</button>
     </section>
   </main>
-
+  
   <footer>
     <p>&copy; 2025 HireTalent. Find the best professionals today!</p>
   </footer>

@@ -1,33 +1,23 @@
+/* General Body Styling */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #F4F4F4;
+    background-color: #F4F4F4;  /* Light gray background to avoid black space */
     color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-h1 {
-    color: white;
+/* Remove default margins and paddings from all elements */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;  /* Ensure that padding and borders don't affect the layout */
 }
 
-h2, h3 {
-    color: #000000;
-}
-
-button {
-    background-color: #198754;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-button:hover {
-    background-color: #145c41;
-}
-
+/* Navbar Styling */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -35,13 +25,16 @@ button:hover {
     background-color: #333;
     padding: 15px 30px;
     color: white;
+    font-size: 16px;  /* Adjusted to match body font size */
 }
 
+/* Logo Styling */
 .logo {
     font-size: 24px;
     font-weight: bold;
 }
 
+/* Navbar Links Styling */
 .nav-links {
     list-style: none;
     display: flex;
@@ -63,13 +56,16 @@ button:hover {
     color: #198754;
 }
 
+/* Hero Section */
 .hero {
     background-color: #0c3f27;
     text-align: center;
     padding: 80px 20px;
     color: white;
+    margin: 0;  /* Ensures no margin at the top */
 }
 
+/* Hero Section Text */
 .hero h1 {
     font-size: 28px;
     margin-bottom: 8px;
@@ -80,21 +76,34 @@ button:hover {
     margin-bottom: 15px;
 }
 
+/* Profile Section */
 .profile-section {
     text-align: center;
     margin-bottom: 15px;
 }
 
+/* Profile Information */
 .profile-info p {
     font-size: 16px;
     line-height: 1.5;
     color: #555;
 }
 
+/* Profile Image - Round */
+.profile-info img {
+    width: 150px;  /* Increased size */
+    height: 150px; /* Increased size */
+    border-radius: 50%;  /* Makes the image round */
+    object-fit: cover;  /* Ensures the image fits well within the circular shape */
+    margin: 10px;
+}
+
+/* Work Image Section */
 .work-images {
     margin-top: 30px;
 }
 
+/* Image Gallery - Larger Work Images */
 .image-gallery {
     display: flex;
     justify-content: center;
@@ -103,11 +112,12 @@ button:hover {
 }
 
 .image-gallery img {
-    max-width: 200px;
+    max-width: 250px;  /* Increased size */
     border-radius: 8px;
     margin-bottom: 15px;
 }
 
+/* Form Styling */
 form {
     margin-top: 15px;
     display: flex;
@@ -115,6 +125,7 @@ form {
     gap: 12px;
 }
 
+/* Form Inputs and Textarea */
 form input,
 form textarea,
 form select {
@@ -125,6 +136,7 @@ form select {
     font-size: 16px;
 }
 
+/* Focused Input Fields */
 form input:focus,
 form textarea:focus,
 form select:focus {
@@ -132,6 +144,7 @@ form select:focus {
     outline: none;
 }
 
+/* Submit Button */
 button[type="submit"] {
     background-color: #198754;
     color: white;
@@ -147,6 +160,7 @@ button[type="submit"]:hover {
     background-color: #145c41;
 }
 
+/* Links */
 a {
     color: #198754;
     text-decoration: none;
@@ -158,10 +172,108 @@ a:hover {
     color: #145c41;
 }
 
+/* Footer Styling */
 footer {
     text-align: center;
-    padding: 20px;
+    padding: 30px;
     background: #0c3f27;
     color: white;
     font-size: 14px;
+    margin-top: auto;
+}
+
+/* Search Bar */
+.search-bar {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.search-bar input {
+    padding: 12px;
+    width: 50%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.search-bar button {
+    padding: 12px 20px;
+    background-color: #198754;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Category Section */
+.categories {
+    text-align: center;
+    padding: 50px 20px;
+    background: #ffffff;
+}
+
+.category-list {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.category {
+    background: #198754;
+    color: #ffffff;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+.category:hover {
+    background: #145c41;
+}
+
+/* Featured Section */
+.featured {
+    text-align: center;
+    padding: 50px 20px;
+    background: #ffffff;
+}
+
+.profiles {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.profile {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 250px;
+    border: 1px solid #ddd;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile:hover {
+    transform: translateY(-10px);
+    box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.profile img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+/* Go Back Button */
+#goBackButton {
+    display: none;
+    margin-top: 20px;
 }
