@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ category.name }} - HireTalent</title>
+    <link rel="stylesheet" href="{% static 'css/category_detail.css' %}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">HireTalent</div>
+        <ul class="nav-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'categories' %}">Categories</a></li>
+            <li><a href="{% url 'my_account' %}">My Account</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+        {% comment %} <button class="join-btn">Join</button> {% endcomment %}
+    </nav>
+
+    <header class="hero">
+        <h1>{{ category.name }}</h1>
+        <p>Explore top professionals in {{ category.name }}.</p>
+    </header>
+   
+    <section class="category-detail">
+        <ul>
+            {% for subcategory in subcategories %}
+            <li><a href="{% url 'subcategory_detail' subcategory.id %}">{{ subcategory.name }}</a></li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'categories' %}" class="back-button">← Back to Categories</a>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 HireTalent. Connecting you with top professionals.</p>
+    </footer>
+
+</body>
+
+</html>

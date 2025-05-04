@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ subcategory.name }} Professionals - HireTalent</title>
+    <link rel="stylesheet" href="{% static 'css/subcategory_detail.css' %}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">HireTalent</div>
+        <ul class="nav-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'categories' %}">Categories</a></li>
+            <li><a href="{% url 'my_account' %}">My Account</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </nav>
+
+    <header class="hero">
+        <h1>{{ subcategory.name }} Professionals</h1>
+        <p>Explore talented professionals specializing in {{ subcategory.name }}.</p>
+    </header>
+
+    <section class="subcategory-detail">
+        {% if freelancers %}
+        <ul>
+            {% for freelancer in freelancers %}
+            <li>
+                <a href="{% url 'profile' freelancer.id %}">{{ freelancer.name }} </a> 
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No freelancers found in this subcategory.</p>
+        {% endif %}
+        <a href="{% url 'category_detail' subcategory.category.id %}" class="back-button">← Back to {{ subcategory.category.name }}</a>
+    </section>
+    
+    <footer>
+        <p>&copy; 2025 HireTalent. Connecting you with top professionals.</p>
+    </footer>
+
+</body>
+
+</html>

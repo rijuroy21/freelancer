@@ -1,0 +1,179 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #F4F4F4;
+    color: #333;
+}
+
+h1 {
+    color: white;
+}
+
+h2, h3 {
+    color: #000000;
+}
+
+button {
+    background-color: #198754;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #145c41;
+}
+
+/* Navigation Bar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding: 15px 30px;
+    color: white;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links li {
+    display: inline;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: #198754;
+}
+
+.join-btn {
+    background-color:#198754;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.join-btn:hover {
+    background-color: #0c3f27;
+}
+
+/* Hero Section */
+.hero {
+    background-color: #0c3f27;
+    text-align: center;
+    padding: 80px 20px;
+    color: #ffffff;
+}
+
+/* Category Detail Section */
+.category-detail {
+    text-align: center;
+    padding: 50px 20px;
+    background: #ffffff;
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.category-detail ul {
+    list-style: none;
+    padding: 0;
+}
+
+.category-detail li {
+    background: #198754;
+    color: white;
+    margin: 10px 0;
+    padding: 12px;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.category-detail li:hover {
+    background: #145c41;
+}
+
+.category-detail a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.back-button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #333;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.back-button:hover {
+    background: #555;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 30px;
+    background: #0c3f27;
+    color: #ffffff;
+    font-size: 14px;
+    margin-top: auto; /* This ensures the footer stays at the bottom */
+    width: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .hero {
+        padding: 50px 20px;
+    }
+
+    .category-detail {
+        padding: 30px 15px;
+    }
+
+    .category-detail li {
+        font-size: 14px;
+    }
+
+    .back-button {
+        padding: 8px 16px;
+    }
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Hire - {{ freelancer.name }}</title>
+    <link rel="stylesheet" href="{% static 'css/confirm_hire.css' %}">
+</head>
+<body>
+     
+      <nav class="navbar">
+        <div class="logo">HireTalent</div>
+        <ul class="nav-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'categories' %}">Categories</a></li>
+            <li><a href="{% url 'my_account' %}">My Account</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+        {% comment %} <button class="join-btn">Join</button> {% endcomment %}
+    </nav>
+
+    <h1>Hire Confirmation</h1>
+    <p>You are about to hire {{ freelancer.name }}.</p>
+    <p><strong>Category:</strong> {{ freelancer.category }}</p>
+    <p><strong>Subcategory:</strong> {{ freelancer.subcategory }}</p>
+    <p><strong>Bio:</strong> {{ freelancer.bio }}</p>
+    <p><a href="{{ freelancer.portfolio_url }}" target="_blank">Portfolio URL</a></p>
+    
+	<section id="contact">
+		<div class="container1">
+			<div class="form-section">
+				<h2>Contact Me</h2>
+				<form action="/submit" method="post">
+					<input type="text" name="name" placeholder="Your Name" required>
+					<input type="email" name="email" placeholder="Your Email" required>
+					<input type="text" name="subject" placeholder="Subject">
+					<textarea name="message" rows="5" placeholder="Message" required></textarea>
+					<button type="submit">Send Message</button>
+				</form>
+			</div>
+		</div>
+	</section>
+</body>
+</html>

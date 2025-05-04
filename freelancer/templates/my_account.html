@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - HireTalent</title>
+    <link rel="stylesheet" href="{% static 'css/my_account.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">HireTalent</div>
+        <ul class="nav-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'categories' %}">Categories</a></li>
+            <li><a href="{% url 'my_account' %}">My Account</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </nav>
+
+    <header class="hero">
+        <h1>Manage Your Profile</h1>
+        <p>Update your details, showcase your skills, and connect with opportunities that match your talent.</p>
+    </header>
+
+    <section class="profile-section">
+        {% if messages %}
+            {% for message in messages %}
+                <p class="message">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+
+        {% if freelancer %}
+            <div class="profile-info">
+                <p><strong>Name:</strong> {{ freelancer.name }}</p>
+                <p><strong>Email:</strong> {{ freelancer.email }}</p>
+                <p><strong>Category:</strong> {{ freelancer.category }}</p>
+                <p><strong>Subcategory:</strong> {{ freelancer.subcategory }}</p>
+                <p><strong>Portfolio:</strong> <a href="{{ freelancer.portfolio_url }}" target="_blank">View Portfolio</a></p>
+                <p><strong>Bio:</strong> {{ freelancer.bio }}</p>
+            </div>
+
+            <!-- Work Image Upload and Gallery -->
+            <section class="work-images">
+                <h2>Your Work Images</h2>
+                <div class="image-gallery">
+                    {% for image in freelancer.work_images.all %}
+                        <img src="{{ image.image.url }}" alt="Work Sample" style="max-width: 200px; margin: 10px;">
+                    {% empty %}
+                        <p>No images uploaded yet.</p>
+                    {% endfor %}
+                </div>
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <label for="work_image"><strong>Upload Work Image:</strong></label>
+                    <input type="file" name="work_image" required>
+                    <button type="submit">Upload</button>
+                </form>
+            </section>
+
+            <!-- Profile Update Form -->
+            <h2>Edit Profile</h2>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Save Changes</button>
+            </form>
+        {% else %}
+            <p>No freelancer profile found. <a href="{% url 'join' %}">Click here to create one.</a></p>
+        {% endif %}
+    </section>
+</body>
+</html>

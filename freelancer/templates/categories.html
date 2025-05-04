@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories - HireTalent</title>
+    <link rel="stylesheet" href="{% static 'css/categories.css' %}">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">HireTalent</div>
+        <ul class="nav-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'categories' %}">Categories</a></li>
+            <li><a href="{% url 'my_account' %}">My Account</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </nav>
+
+    <header class="hero">
+        <h1>Explore Categories</h1>
+        <p>Discover top professionals in various fields</p>
+    </header>
+ 
+    <section class="categories">
+        <div class="category-list">
+            {% for category in categories %}
+            <a href="{% url 'category_detail' category.id %}" class="category">
+                {{ category.name }}
+            </a>
+            {% empty %}
+            <p>No categories found.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 HireTalent. Connecting you with top professionals.</p>
+    </footer>
+
+</body>
+</html>

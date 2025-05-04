@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hire Designers</title>
+  <link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="logo">HireTalent</div>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="{% url 'categories' %}">Categories</a></li>
+    {% if user.is_authenticated %}
+    <li><a href="{% url 'my_account' %}">My Account</a></li>
+    <li><a href="{% url 'logout' %}">Logout</a></li>
+    {% else %}
+    <a href="{% url 'join' %}"><button class="join-btn">Join</button></a>
+    {% endif %}
+    </ul>
+  </nav>
+
+  <header class="hero">
+    <h1>Find the Best Designers</h1>
+    <p>Connect with top talent to bring your ideas to life.</p>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search for any service....">
+      <button id="searchButton">Search</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="featured">
+      <h2>Featured Professionals</h2>
+      <div class="profiles">
+        {% for freelancer in freelancers %}
+        <div class="profile">
+            <h3>{{ freelancer.name }}</h3>
+            <p>{{ freelancer.subcategory }}</p>
+            <a href="{% url 'profile' freelancer.id %}"><button>View Profile</button></a>
+        </div>
+        {% empty %}
+        <p>No freelancers found.</p>
+        {% endfor %}
+      </div>
+      
+      <button id="goBackButton" style="display: none;" onclick="goBack()">← Back to home</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 HireTalent. Find the best professionals today!</p>
+  </footer>
+
+  <script>
+
+    function performSearch() {
+        let query = document.getElementById("searchInput").value.toLowerCase();
+        let profiles = document.querySelectorAll(".profile");
+        let found = false;
+
+        profiles.forEach(profile => {
+            let text = profile.innerText.toLowerCase();
+            profile.style.display = text.includes(query) ? "block" : "none";
+            if (text.includes(query)) found = true;
+        });
+
+        let noResults = document.getElementById("noResultsMessage");
+
+        if (!found) {
+            if (!noResults) {
+                noResults = document.createElement("p");
+                noResults.id = "noResultsMessage";
+                noResults.textContent = "No results found.";
+                noResults.style.color = "red";
+                document.querySelector(".profiles").appendChild(noResults);
+            }
+        } else if (noResults) {
+            noResults.remove();
+        }
+
+        document.getElementById("goBackButton").style.display = "inline-block";
+    }
+
+    document.getElementById("searchButton").addEventListener("click", performSearch);
+
+    document.getElementById("searchInput").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            performSearch();  
+        }
+    });
+
+   
+    function goBack() {
+        document.getElementById("searchInput").value = "";
+
+        let profiles = document.querySelectorAll(".profile");
+        profiles.forEach(profile => {
+            profile.style.display = "block";
+        });
+
+        document.getElementById("goBackButton").style.display = "none";
+
+        let noResults = document.getElementById("noResultsMessage");
+        if (noResults) {
+            noResults.remove();
+        }
+    }
+  </script>
+
+</body>
+
+</html>

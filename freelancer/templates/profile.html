@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ freelancer.name }}'s Profile</title>
+  <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="logo">HireTalent</div>
+    <ul class="nav-links">
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'categories' %}">Categories</a></li>
+        <li><a href="{% url 'my_account' %}">My Account</a></li>
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+    </ul>
+  </nav>
+
+  <section class="profile">
+    <h1>{{ freelancer.name }}'s Profile</h1>
+    <div class="profile-details">
+      <div class="details">
+        <h2>{{ freelancer.category }}</h2>
+        <h3>{{ freelancer.subcategory }}</h3>
+        <p>{{ freelancer.email }}</p>
+        <p><strong>Portfolio URL:</strong> <a href="{{ freelancer.portfolio_url }}" target="_blank">{{ freelancer.portfolio_url }}</a></p>
+        <p><strong>Bio:</strong></p>
+        <p>{{ freelancer.bio }}</p>
+
+        {% if freelancer.image %}
+          <h2>Profile Image</h2>
+          <img src="{{ freelancer.image.url }}" alt="Profile Image" class="freelancer-image">
+        {% else %}
+          <p>No profile image uploaded.</p>
+        {% endif %}
+
+        <h2>Work Samples</h2>
+        {% if work_images %}
+          <ul>
+            {% for work_image in work_images %}
+              <li><img src="{{ work_image.image.url }}" alt="Work Image" class="work-sample-image"></li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>No work samples uploaded yet.</p>
+        {% endif %}
+      </div>
+
+      <div class="hire-now">
+        <a href="{% url 'hire_freelancer' freelancer.id %}">
+          <button class="hire-btn">Hire Now</button>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 HireTalent. Connect with clients and grow your career.</p>
+  </footer>
+
+</body>
+
+</html>

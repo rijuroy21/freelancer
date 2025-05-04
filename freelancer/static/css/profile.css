@@ -1,0 +1,183 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F4F4F4;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+h1 {
+    color: white;
+}
+
+h2, h3 {
+    color: #000000;
+}
+
+button {
+    background-color: #198754;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #145c41;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding: 15px 30px;
+    color: white;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links li {
+    display: inline;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: #198754;
+}
+
+.profile {
+    max-width: 400px;
+    margin: 40px auto;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 25px 20px;
+    text-align: center;
+}
+
+.profile h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.details {
+    margin-top: 15px;
+    font-size: 16px;
+}
+
+.details h2 {
+    font-size: 20px;
+    margin-bottom: 4px;
+}
+
+.details h3 {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.details p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.details a {
+    color: #0d6efd;
+    text-decoration: none;
+    word-break: break-all;
+}
+
+.details a:hover {
+    text-decoration: underline;
+}
+
+/* Styling for Work Samples - 4 images in a row */
+.work-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px; /* Space between images */
+    justify-content: center; /* Align images to the center */
+    margin-top: 20px;
+}
+
+.work-sample-image {
+    width: 200px; /* Fixed size for images */
+    height: 200px; /* Keep images square */
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Clean rectangular image */
+.image-wrapper {
+    width: 100%;
+    max-width: 300px;
+    height: 225px; /* 4:3 ratio */
+    margin: 20px auto;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.freelancer-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.hire-now {
+    margin-top: 20px;
+}
+
+.hire-btn {
+    background-color: #198754;
+    color: white;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.hire-btn:hover {
+    background-color: #146c43;
+    transform: translateY(-2px);
+}
+
+footer {
+    text-align: center;
+    padding: 30px;
+    background: #0c3f27;
+    color: #ffffff;
+    font-size: 14px;
+    margin-top: auto;
+    width: 100%;
+}

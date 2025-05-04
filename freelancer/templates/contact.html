@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - HireTalent</title>
+    <link rel="stylesheet" href="{% static 'css/contact.css' %}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">HireTalent</div>
+        <ul class="nav-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'categories' %}">Categories</a></li>
+            <li><a href="{% url 'my_account' %}">My Account</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+          
+        </ul>
+        {% comment %} <button class="join-btn">Join</button> {% endcomment %}
+    </nav>
+    <section class="contact-container">
+        <h1>Contact Us</h1>
+        <p>Got a question? We'd love to hear from you.</p>
+
+        <div class="contact-form">
+            <form method="POST">
+                {% csrf_token %}
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+                <label for="email">Your Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+                <label for="message">Your Message</label>
+                <textarea id="message" name="message" placeholder="Write your message..." required></textarea>
+
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+
+        <div class="contact-info">
+            <h2>Contact Details</h2>
+            <p><strong>Email:</strong> support@hiretalent.com</p>
+            <p><strong>Phone:</strong> +1 234 567 890</p>
+            <p><strong>Address:</strong> 123 Main Street, City, Country</p>
+
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 HireTalent. Connecting you with top professionals.</p>
+    </footer>
+
+</body>
