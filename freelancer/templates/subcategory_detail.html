@@ -25,21 +25,31 @@
         <p>Explore talented professionals specializing in {{ subcategory.name }}.</p>
     </header>
 
-    <section class="subcategory-detail">
-        {% if freelancers %}
-        <ul>
+    <!-- Freelancer Profiles Section -->
+    <section class="featured">
+        <h2>Professionals in {{ subcategory.name }}</h2>
+        <div class="profiles">
             {% for freelancer in freelancers %}
-            <li>
-                <a href="{% url 'profile' freelancer.id %}">{{ freelancer.name }} </a> 
-            </li>
+                <div class="profile">
+                    {% if freelancer.image %}
+                        <img src="{{ freelancer.image.url }}" alt="{{ freelancer.name }}" class="profile-img">
+                    {% else %}
+                        <img src="{% static 'images/noprofile.png' %}" alt="Default Image" class="profile-img">
+                    {% endif %}
+                    <h3>{{ freelancer.name }}</h3>
+                    <p>{{ freelancer.subcategory }}</p>
+                    <a href="{% url 'profile' freelancer.id %}"><button>View Profile</button></a>
+                </div>
+            {% empty %}
+                <p>No freelancers found in this subcategory.</p>
             {% endfor %}
-        </ul>
-        {% else %}
-        <p>No freelancers found in this subcategory.</p>
-        {% endif %}
-        <a href="{% url 'category_detail' subcategory.category.id %}" class="back-button">← Back to {{ subcategory.category.name }}</a>
+        </div>
     </section>
-    
+
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="{% url 'category_detail' subcategory.category.id %}" class="back-button">← Back to {{ subcategory.category.name }}</a>
+    </div>
+
     <footer>
         <p>&copy; 2025 HireTalent. Connecting you with top professionals.</p>
     </footer>

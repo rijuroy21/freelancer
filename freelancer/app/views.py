@@ -217,14 +217,11 @@ def my_account(request):
 
     if request.method == 'POST':
         if 'work_image' in request.FILES:
-            # Handle new work image upload
             image = request.FILES['work_image']
-            image_obj = FreelancerImage.objects.create(image=image)
-            freelancer.work_images.add(image_obj)
+            WorkImage.objects.create(freelancer=freelancer, image=image)
             messages.success(request, 'Work image uploaded successfully.')
             return redirect('my_account')
         else:
-            # Handle profile edit
             form = FreelancerEditForm(request.POST, request.FILES, instance=freelancer)
             if form.is_valid():
                 form.save()
@@ -240,14 +237,25 @@ def my_account(request):
         'freelancer': freelancer
     })
 
+@login_required
+def delete_profile_image(request):
+    freelancer = Freelancer.objects.filter(email__iexact=request.user.email).first()
+    if freelancer and freelancer.image:
+        freelancer.image.delete(save=False)
+        freelancer.image = None
+        freelancer.save()
+        messages.success(request, "Profile image deleted successfully.")
+    return redirect('my_account')
 
-def submit_rating(request, freelancer_id):
-    if request.method == 'POST':
-        rating = request.POST.get('rating')
-        review = request.POST.get('review', '')
-        # Save to database
-        Rating.objects.create(freelancer_id=freelancer_id, rating=rating, review=review)
-        return redirect('freelancer_profile', freelancer_id=freelancer_id)
+@login_required
+def delete_work_image(request, image_id):
+    freelancer = Freelancer.objects.filter(email__iexact=request.user.email).first()
+    image = get_object_or_404(WorkImage, id=image_id, freelancer=freelancer)
+    image.image.delete()
+    image.delete()
+    messages.success(request, "Work image deleted successfully.")
+    return redirect('my_account')
+
 
 def hire_freelancer(request, freelancer_id):
     freelancer = get_object_or_404(Freelancer, pk=freelancer_id)

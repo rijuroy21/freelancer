@@ -18,5 +18,7 @@ urlpatterns = [
     path('hire/<int:freelancer_id>/', views.hire_freelancer, name='hire_freelancer'),
     path('confirm-hire/<int:freelancer_id>/', views.confirm_hire, name='confirm_hire'),
     path('freelancers/', views.all_freelancers, name='all_freelancers'),
+    path('delete-profile-image/', views.delete_profile_image, name='delete_profile_image'),
+    path('delete-work-image/<int:image_id>/', views.delete_work_image, name='delete_work_image'),
     
 ]

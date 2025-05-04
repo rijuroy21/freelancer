@@ -1,279 +1,210 @@
-/* General Body Styling */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #F4F4F4;  /* Light gray background to avoid black space */
-    color: #333;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-/* Remove default margins and paddings from all elements */
+/* Reset */
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;  /* Ensure that padding and borders don't affect the layout */
+    box-sizing: border-box;
 }
 
-/* Navbar Styling */
+/* Base Styling */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f7f9fc;
+    color: #333;
+    line-height: 1.6;
+}
+
+a {
+    color:  #145c41;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Navbar */
 .navbar {
+    background-color: #222;
+    padding: 15px 30px;
+    color: white;
+}
+
+.navbar .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #333;
-    padding: 15px 30px;
-    color: white;
-    font-size: 16px;  /* Adjusted to match body font size */
 }
 
-/* Logo Styling */
 .logo {
     font-size: 24px;
     font-weight: bold;
 }
 
-/* Navbar Links Styling */
 .nav-links {
     list-style: none;
     display: flex;
     gap: 20px;
 }
 
-.nav-links li {
-    display: inline;
-}
-
-.nav-links a {
+.nav-links li a {
     color: white;
-    text-decoration: none;
-    font-size: 16px;
-    transition: 0.3s;
+    font-weight: 500;
 }
 
-.nav-links a:hover {
-    color: #198754;
+.nav-links li a:hover {
+    color: #145c41;
 }
 
 /* Hero Section */
 .hero {
+    text-align: center;
     background-color: #0c3f27;
-    text-align: center;
-    padding: 80px 20px;
     color: white;
-    margin: 0;  /* Ensures no margin at the top */
+    padding: 60px 20px;
 }
 
-/* Hero Section Text */
-.hero h1 {
-    font-size: 28px;
-    margin-bottom: 8px;
+/* Main Content */
+.content {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
 }
 
-.hero p {
-    font-size: 16px;
-    margin-bottom: 15px;
-}
-
-/* Profile Section */
-.profile-section {
-    text-align: center;
-    margin-bottom: 15px;
-}
-
-/* Profile Information */
-.profile-info p {
-    font-size: 16px;
-    line-height: 1.5;
-    color: #555;
-}
-
-/* Profile Image - Round */
-.profile-info img {
-    width: 150px;  /* Increased size */
-    height: 150px; /* Increased size */
-    border-radius: 50%;  /* Makes the image round */
-    object-fit: cover;  /* Ensures the image fits well within the circular shape */
-    margin: 10px;
-}
-
-/* Work Image Section */
-.work-images {
-    margin-top: 30px;
-}
-
-/* Image Gallery - Larger Work Images */
-.image-gallery {
+/* Profile Card */
+.profile-card {
     display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
+    gap: 30px;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    margin-bottom: 40px;
 }
 
-.image-gallery img {
-    max-width: 250px;  /* Increased size */
-    border-radius: 8px;
+.profile-left {
+    flex: 1;
+    text-align: center;
+}
+
+.profile-img {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.profile-right {
+    flex: 2;
+}
+
+.profile-right h2 {
+    font-size: 22px;
     margin-bottom: 15px;
 }
 
-/* Form Styling */
-form {
-    margin-top: 15px;
+/* Upload Form */
+.upload-form {
+    margin-top: 10px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-}
-
-/* Form Inputs and Textarea */
-form input,
-form textarea,
-form select {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 16px;
-}
-
-/* Focused Input Fields */
-form input:focus,
-form textarea:focus,
-form select:focus {
-    border-color: #198754;
-    outline: none;
-}
-
-/* Submit Button */
-button[type="submit"] {
-    background-color: #198754;
-    color: white;
-    border: none;
-    padding: 12px;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: background 0.3s;
-    font-size: 16px;
-}
-
-button[type="submit"]:hover {
-    background-color: #145c41;
-}
-
-/* Links */
-a {
-    color: #198754;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-a:hover {
-    text-decoration: underline;
-    color: #145c41;
-}
-
-/* Footer Styling */
-footer {
-    text-align: center;
-    padding: 30px;
-    background: #0c3f27;
-    color: white;
-    font-size: 14px;
-    margin-top: auto;
-}
-
-/* Search Bar */
-.search-bar {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
     gap: 10px;
 }
 
-.search-bar input {
-    padding: 12px;
-    width: 50%;
+.upload-form input[type="file"] {
+    padding: 8px;
+    border-radius: 6px;
     border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
 }
 
-.search-bar button {
-    padding: 12px 20px;
-    background-color: #198754;
+.upload-form button {
+    padding: 10px;
+    background: #198754;
     color: white;
     border: none;
-    border-radius: 5px;
-    font-size: 16px;
+    border-radius: 6px;
     cursor: pointer;
+    transition: 0.3s;
 }
 
-/* Category Section */
-.categories {
-    text-align: center;
-    padding: 50px 20px;
-    background: #ffffff;
-}
-
-.category-list {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.category {
-    background: #198754;
-    color: #ffffff;
-    padding: 12px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background 0.3s ease;
-}
-
-.category:hover {
+.upload-form button:hover {
     background: #145c41;
 }
 
-/* Featured Section */
-.featured {
-    text-align: center;
-    padding: 50px 20px;
-    background: #ffffff;
+/* Gallery */
+.gallery-section h2 {
+    margin-bottom: 15px;
 }
 
-.profiles {
+.image-gallery {
     display: flex;
-    justify-content: center;
-    gap: 25px;
     flex-wrap: wrap;
+    gap: 20px;
 }
 
-.profile {
-    background: #ffffff;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+.image-box {
+    position: relative;
+}
+
+.image-box img {
+    width: 200px;
+    border-radius: 8px;
+}
+
+.image-box .delete-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #ff4444;
+    color: white;
+    border: none;
+    padding: 6px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Edit Section */
+.edit-section h2 {
+    margin-bottom: 15px;
+}
+
+.edit-form {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.edit-form input,
+.edit-form textarea,
+.edit-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.edit-form button {
+    background: #198754;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.edit-form button:hover {
+    background: #145c41;
+}
+
+/* Footer */
+footer {
     text-align: center;
-    width: 250px;
-    border: 1px solid #ddd;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.profile:hover {
-    transform: translateY(-10px);
-    box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2);
-}
-
-.profile img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-}
-
-/* Go Back Button */
-#goBackButton {
-    display: none;
-    margin-top: 20px;
+    padding: 30px;
+    background-color: #222;
+    color: white;
+    font-size: 14px;
 }

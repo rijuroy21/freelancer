@@ -12,7 +12,6 @@
         <div class="logo">HireTalent</div>
         <ul class="nav-links">
             <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'categories' %}">Categories</a></li>
             <li><a href="{% url 'my_account' %}">My Account</a></li>
             <li><a href="{% url 'logout' %}">Logout</a></li>
         </ul>
@@ -27,10 +26,6 @@
             <p class="category">{{ freelancer.category }} - {{ freelancer.subcategory }}</p>
             <p><strong>Email:</strong> {{ freelancer.email }}</p>
             <p><strong>Portfolio:</strong> <a href="{{ freelancer.portfolio_url }}" target="_blank">{{ freelancer.portfolio_url }}</a></p>
-            <p><strong>Rating:</strong> ⭐ 5.0 (1k+)</p>
-            <p><strong>Location:</strong> 🌍 India • Speaks English</p>
-            <p class="availability">📅 Currently available</p>
-            <p><strong>Average response time:</strong> 1 hour</p>
             <a href="{% url 'hire_freelancer' freelancer.id %}">
                 <button class="hire-btn">Hire Now</button>
             </a>
