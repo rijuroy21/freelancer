@@ -38,6 +38,7 @@ class Freelancer(models.Model):
         return f"{self.name} - {self.subcategory}"
 
 
+
 class WorkImage(models.Model):
     freelancer = models.ForeignKey(Freelancer, on_delete=models.CASCADE, related_name='work_images')
     image = models.ImageField(upload_to='work_samples/')

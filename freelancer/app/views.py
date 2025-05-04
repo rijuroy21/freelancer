@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 import random
+from django.db.models.functions import Lower
+
 
 from .models import *
 from .forms import RegisterForm, FreelancerEditForm
@@ -108,11 +110,36 @@ def reset_password(request):
 
     return render(request, 'reset_password.html')
 
-
 def home(request):
-    freelancers = Freelancer.objects.all()
-    return render(request, 'home.html', {'freelancers': freelancers})
+    categories = Category.objects.all()
+    freelancers = Freelancer.objects.order_by('-id')[:8]  # Latest 8 freelancers
+    return render(request, 'home.html', {
+        'freelancers': freelancers,
+        'categories': categories
+    })
 
+def all_freelancers(request):
+    freelancers = Freelancer.objects.all()
+    category = request.GET.get('category')
+    sort = request.GET.get('sort')
+
+    if category:
+        freelancers = freelancers.filter(category=category)
+
+    if sort == 'name_asc':
+        freelancers = freelancers.order_by(Lower('name'))
+    elif sort == 'name_desc':
+        freelancers = freelancers.order_by(Lower('name').desc())
+    elif sort == 'latest':
+        freelancers = freelancers.order_by('-created_at')
+    elif sort == 'oldest':
+        freelancers = freelancers.order_by('created_at')
+
+    context = {
+        'freelancers': freelancers,
+        'category_choices': Freelancer.CATEGORY_CHOICES,
+    }
+    return render(request, 'all_freelancers.html', context)
 
 @login_required
 def categories(request):
@@ -213,6 +240,14 @@ def my_account(request):
         'freelancer': freelancer
     })
 
+
+def submit_rating(request, freelancer_id):
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        review = request.POST.get('review', '')
+        # Save to database
+        Rating.objects.create(freelancer_id=freelancer_id, rating=rating, review=review)
+        return redirect('freelancer_profile', freelancer_id=freelancer_id)
 
 def hire_freelancer(request, freelancer_id):
     freelancer = get_object_or_404(Freelancer, pk=freelancer_id)

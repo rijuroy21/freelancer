@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   {% load static %}
   <meta charset="UTF-8">
@@ -15,13 +14,12 @@
     <div class="logo">HireTalent</div>
     <ul class="nav-links">
       <li><a href="#">Home</a></li>
-      <li><a href="{% url 'categories' %}">Categories</a></li>
-    {% if user.is_authenticated %}
-    <li><a href="{% url 'my_account' %}">My Account</a></li>
-    <li><a href="{% url 'logout' %}">Logout</a></li>
-    {% else %}
-    <a href="{% url 'join' %}"><button class="join-btn">Join</button></a>
-    {% endif %}
+      {% if user.is_authenticated %}
+        <li><a href="{% url 'my_account' %}">My Account</a></li>
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+      {% else %}
+        <a href="{% url 'join' %}"><button class="join-btn">Join</button></a>
+      {% endif %}
     </ul>
   </nav>
 
@@ -33,19 +31,32 @@
       <button id="searchButton">Search</button>
     </div>
   </header>
+
   <main>
+
+    <!-- Explore Categories Section -->
+    <section class="explore-categories">
+      <h2>Explore Categories</h2>
+      <div class="category-list">
+        {% for category in categories %}
+          <a href="{% url 'category_detail' category.id %}" class="category-link">{{ category.name }}</a>
+        {% empty %}
+          <p>No categories found.</p>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- Featured Freelancers Section -->
     <section class="featured">
       <h2>Featured Professionals</h2>
       <div class="profiles">
         {% for freelancer in freelancers %}
           <div class="profile">
-            <!-- Display profile image or fallback -->
             {% if freelancer.image %}
               <img src="{{ freelancer.image.url }}" alt="{{ freelancer.name }}" class="profile-img">
             {% else %}
               <img src="{% static 'images/noprofile.png' %}" alt="Default Image" class="profile-img">
             {% endif %}
-            
             <h3>{{ freelancer.name }}</h3>
             <p>{{ freelancer.subcategory }}</p>
             <a href="{% url 'profile' freelancer.id %}"><button>View Profile</button></a>
@@ -54,17 +65,26 @@
           <p>No freelancers found.</p>
         {% endfor %}
       </div>
-      
+
+      {% if freelancers|length >= 8 %}
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="{% url 'all_freelancers' %}">
+            <button class="join-btn">Show More</button>
+        </a>
+    </div>
+{% endif %}
+
+
       <button id="goBackButton" style="display: none;" onclick="goBack()">← Back to home</button>
     </section>
+
   </main>
-  
+
   <footer>
     <p>&copy; 2025 HireTalent. Find the best professionals today!</p>
   </footer>
 
   <script>
-
     function performSearch() {
         let query = document.getElementById("searchInput").value.toLowerCase();
         let profiles = document.querySelectorAll(".profile");
@@ -97,14 +117,12 @@
 
     document.getElementById("searchInput").addEventListener("keypress", function(event) {
         if (event.key === "Enter") {
-            performSearch();  
+            performSearch();
         }
     });
 
-   
     function goBack() {
         document.getElementById("searchInput").value = "";
-
         let profiles = document.querySelectorAll(".profile");
         profiles.forEach(profile => {
             profile.style.display = "block";
@@ -120,5 +138,4 @@
   </script>
 
 </body>
-
 </html>

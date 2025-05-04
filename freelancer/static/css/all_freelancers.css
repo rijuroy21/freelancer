@@ -52,40 +52,17 @@ button:hover {
     gap: 20px;
 }
 
-.nav-links li {
-    display: inline;
-}
-
 .nav-links a {
     color: white;
     text-decoration: none;
     font-size: 16px;
-    transition: 0.3s;
-}
-
-.nav-links a:hover {
-    color: #198754;
-}
-
-.join-btn {
-    background-color: #198754;
-    color: white;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.join-btn:hover {
-    background-color: #0c3f27;
 }
 
 .hero {
-    background-color: #0c3f27;
     text-align: center;
-    padding: 80px 20px;
-    color: #ffffff;
+    padding: 50px;
+    background-color: #0c3f27;
+    color: white;
 }
 
 .search-bar {
@@ -113,44 +90,70 @@ button:hover {
     cursor: pointer;
 }
 
-.categories {
-    text-align: center;
-    padding: 50px 20px;
-    background: #ffffff;
-}
-
-.category-list {
+.filter-section {
+    background-color: #e9f5ef;
+    padding: 20px 0;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
     display: flex;
     justify-content: center;
-    gap: 15px;
+}
+
+.filter-form {
+    display: flex;
     flex-wrap: wrap;
+    gap: 20px;
+    background-color: #ffffff;
+    padding: 15px 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    align-items: center;
 }
 
-.category {
-    background: #198754;
-    color: #ffffff;
-    padding: 12px 20px;
-    border-radius: 5px;
-    cursor: pointer;
+.filter-form label {
+    font-weight: bold;
+    color: #0c3f27;
+}
+
+.filter-form select {
+    padding: 10px 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
     font-size: 14px;
-    transition: background 0.3s ease;
+    min-width: 150px;
 }
 
-.category:hover {
-    background: #145c41;
+.filter-form select:focus {
+    border-color: #198754;
+    outline: none;
 }
 
-.featured {
-    text-align: center;
+.apply-filter-btn {
+    padding: 10px 20px;
+    background-color: #198754;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.apply-filter-btn:hover {
+    background-color: #145c41;
+}
+
+.profiles-section {
     padding: 50px 20px;
-    background: #ffffff;
+    background-color: #ffffff;
 }
 
 .profiles {
     display: flex;
-    justify-content: center;
-    gap: 25px;
     flex-wrap: wrap;
+    gap: 25px;
+    justify-content: center;
 }
 
 .profile {
@@ -169,7 +172,7 @@ button:hover {
     box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2);
 }
 
-.profile img {
+.profile-img {
     width: 120px;
     height: 120px;
     border-radius: 50%;
@@ -178,37 +181,17 @@ button:hover {
     margin-bottom: 15px;
 }
 
-.explore-categories {
-    text-align: center;
-    padding: 40px 20px;
-    background-color: #f9f9f9;
-}
-
-.explore-categories h2 {
-    font-size: 28px;
-    margin-bottom: 20px;
-    color: #333;
-}
-
-.category-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-}
-
-.category-link {
+.view-profile-btn {
     background-color: #198754;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 25px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: background-color 0.3s ease;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 5px;
 }
 
-.category-link:hover {
-    background-color: #145c38;
+.view-profile-btn:hover {
+    background-color: #145c41;
 }
 
 footer {
@@ -217,7 +200,6 @@ footer {
     background: #0c3f27;
     color: #ffffff;
     font-size: 14px;
-    margin-top: auto;
 }
 
 #goBackButton {

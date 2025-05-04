@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Freelancers - HireTalent</title>
+    <link rel="stylesheet" href="{% static 'css/all_freelancers.css' %}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">HireTalent</div>
+        <ul class="nav-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'my_account' %}">My Account</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+                <a href="{% url 'join' %}"><button class="join-btn">Join</button></a>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <header class="hero">
+        <h1>All Freelancers</h1>
+        <p>Browse the best freelancers in various categories.</p>
+
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search freelancers...">
+            <button id="searchButton">Search</button>
+        </div>
+    </header>
+
+    <!-- Filter Section -->
+    <section class="filter-section">
+        <form method="get" class="filter-form">
+            <label for="category">Category:</label>
+            <select name="category" id="category">
+                <option value="">All Categories</option>
+                {% for key, value in category_choices %}
+                    <option value="{{ key }}" {% if request.GET.category == key %}selected{% endif %}>{{ value }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="sort">Sort By:</label>
+            <select name="sort" id="sort">
+                <option value="">Default</option>
+                <option value="name_asc" {% if request.GET.sort == 'name_asc' %}selected{% endif %}>Name A-Z</option>
+                <option value="name_desc" {% if request.GET.sort == 'name_desc' %}selected{% endif %}>Name Z-A</option>
+                <option value="latest" {% if request.GET.sort == 'latest' %}selected{% endif %}>Latest</option>
+                <option value="oldest" {% if request.GET.sort == 'oldest' %}selected{% endif %}>Oldest</option>
+            </select>
+
+            <button type="submit" class="apply-filter-btn">Apply Filters</button>
+        </form>
+    </section>
+
+    <main>
+        <section class="profiles-section">
+            <div class="profiles">
+                {% for freelancer in freelancers %}
+                    <div class="profile">
+                        {% if freelancer.image %}
+                            <img src="{{ freelancer.image.url }}" alt="{{ freelancer.name }}" class="profile-img">
+                        {% else %}
+                            <img src="{% static 'images/noprofile.png' %}" alt="Default Image" class="profile-img">
+                        {% endif %}
+                        <h3>{{ freelancer.name }}</h3>
+                        <p>{{ freelancer.subcategory }}</p>
+                        <a href="{% url 'profile' freelancer.id %}">
+                            <button class="view-profile-btn">View Profile</button>
+                        </a>
+                    </div>
+                {% empty %}
+                    <p>No freelancers found.</p>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 HireTalent. Find the best professionals today!</p>
+    </footer>
+
+    <script>
+        function performSearch() {
+            let query = document.getElementById("searchInput").value.toLowerCase();
+            let profiles = document.querySelectorAll(".profile");
+            let found = false;
+
+            profiles.forEach(profile => {
+                let text = profile.innerText.toLowerCase();
+                profile.style.display = text.includes(query) ? "block" : "none";
+                if (text.includes(query)) found = true;
+            });
+
+            let noResults = document.getElementById("noResultsMessage");
+
+            if (!found) {
+                if (!noResults) {
+                    noResults = document.createElement("p");
+                    noResults.id = "noResultsMessage";
+                    noResults.textContent = "No results found.";
+                    noResults.style.color = "red";
+                    document.querySelector(".profiles").appendChild(noResults);
+                }
+            } else if (noResults) {
+                noResults.remove();
+            }
+        }
+
+        document.getElementById("searchButton").addEventListener("click", performSearch);
+
+        document.getElementById("searchInput").addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                performSearch();
+            }
+        });
+    </script>
+
+</body>
+
+</html>
