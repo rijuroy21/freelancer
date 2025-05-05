@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 import random
 from django.db.models.functions import Lower
+from django.conf import settings
 
 
 from .models import *
@@ -264,4 +265,34 @@ def hire_freelancer(request, freelancer_id):
 
 def confirm_hire(request, freelancer_id):
     freelancer = get_object_or_404(Freelancer, pk=freelancer_id)
-    return render(request, 'confirm_hire.html', {'freelancer': freelancer})
+    success = False
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        subject = request.POST.get('subject') or f"Hire Inquiry for {freelancer.name}"
+        message = request.POST.get('message')
+
+        full_message = f"""
+        You have a new hire inquiry for {freelancer.name}.
+
+        From: {name}
+        Email: {email}
+        Subject: {subject}
+        Message:
+        {message}
+
+        Freelancer Info:
+        Category: {freelancer.category}
+        Subcategory: {freelancer.subcategory}
+        Bio: {freelancer.bio}
+        Portfolio: {freelancer.portfolio_url}
+        """
+
+        send_mail(subject, full_message, settings.EMAIL_HOST_USER, [settings.EMAIL_HOST_USER])
+        success = True
+
+    return render(request, 'confirm_hire.html', {
+        'freelancer': freelancer,
+        'success': success
+    })
