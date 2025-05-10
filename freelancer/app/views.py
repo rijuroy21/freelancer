@@ -113,7 +113,7 @@ def reset_password(request):
 
 def home(request):
     categories = Category.objects.all()
-    freelancers = Freelancer.objects.order_by('-id')[:8]  # Latest 8 freelancers
+    freelancers = Freelancer.objects.order_by('-id')[:8] 
     return render(request, 'home.html', {
         'freelancers': freelancers,
         'categories': categories
@@ -207,6 +207,19 @@ def profile(request, freelancer_id):
     work_images = freelancer.work_images.all()
     
     return render(request, 'profile.html', {'freelancer': freelancer, 'work_images': work_images})
+
+
+def search_results(request):
+    query = request.GET.get('q')
+    freelancers = []
+    if query:
+        freelancers = Freelancer.objects.filter(
+            name__icontains=query
+        ) | Freelancer.objects.filter(
+            subcategory__name__icontains=query
+        )
+    return render(request, 'search_results.html', {'query': query, 'freelancers': freelancers})
+
 
 @login_required
 def my_account(request):

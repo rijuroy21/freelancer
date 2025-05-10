@@ -1,4 +1,4 @@
-body {
+/* body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
     background-color: #f9f9f9;
@@ -45,7 +45,7 @@ body {
     padding: 80px 20px;
     color: #ffffff;
 }
-/* Subcategory Section */
+
 .subcategory-list {
     padding: 60px 20px;
     background-color: #fff;
@@ -63,7 +63,7 @@ body {
     color: #242020;
 }
 
-/* Card Grid */
+
 .card-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr); 
@@ -107,7 +107,6 @@ body {
     color: #666;
 }
 
-/* Back Button */
 .back-link {
     text-align: center;
     margin-top: 60px;
@@ -127,7 +126,6 @@ body {
     background-color: #555;
 }
 
-/* Footer */
 footer {
     background-color: #0c3f27;
     color: #fff;
@@ -136,7 +134,7 @@ footer {
     font-size: 14px;
 }
 
-/* Responsive Fix */
+
 @media (max-width: 768px) {
     .hero-content h1 {
         font-size: 28px;
@@ -153,4 +151,4 @@ footer {
     .card-content p {
         font-size: 13px;
     }
-}
+} */

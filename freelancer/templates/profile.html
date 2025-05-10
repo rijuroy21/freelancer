@@ -1,59 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ freelancer.name }}'s Profile</title>
-    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ freelancer.name }}'s Profile</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <nav class="navbar">
-        <div class="logo">HireTalent</div>
-        <ul class="nav-links">
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'my_account' %}">My Account</a></li>
-            <li><a href="{% url 'logout' %}">Logout</a></li>
+
+<body class="d-flex flex-column min-vh-100 bg-light text-dark">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #0c3f27;">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold fs-4" href="#">HireTalent</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'home' %}">Home</a>
+          </li>
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'my_account' %}">My Account</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a href="{% url 'join' %}" class="btn btn-success ms-2">Join</a>
+          </li>
+          {% endif %}
         </ul>
-    </nav>
+      </div>
+    </div>
+  </nav>
 
-    <section class="freelancer-header">
-        <div class="left">
-            <img src="{% if freelancer.image %}{{ freelancer.image.url }}{% else %}{% static 'images/noprofile.png' %}{% endif %}" class="profile-pic" alt="Profile Picture">
+
+  <!-- Hero Section -->
+  <header class="py-5 text-center text-white" style="background-color: #0c3f27;">
+    <div class="container">
+      <h1 class="display-5">Showcase Your Talent to the World</h1>
+      <p class="lead">Explore amazing opportunities and connect with clients looking for your skills.</p>
+    </div>
+  </header>
+
+
+  <!-- Freelancer Header -->
+  <section class="freelancer-header d-flex flex-wrap gap-3 mt-5 pt-5 mb-4 container bg-white rounded-3 shadow-sm p-4">
+    <div class="left text-center flex-shrink-0">
+      <img
+        src="{% if freelancer.image %}{{ freelancer.image.url }}{% else %}{% static 'images/noprofile.png' %}{% endif %}"
+        class="profile-pic rounded-circle" alt="Profile Picture"
+        style="width: 160px; height: 160px; object-fit: cover; border: 4px solid #ddd;">
+    </div>
+    <div class="right flex-grow-1">
+      <h1 class="h3">{{ freelancer.name }}</h1>
+      <p class="category text-muted">{{ freelancer.category }} - {{ freelancer.subcategory }}</p>
+      <p><strong>Email:</strong> {{ freelancer.email }}</p>
+      <p><strong>Portfolio:</strong> <a href="{{ freelancer.portfolio_url }}" target="_blank">{{ freelancer.portfolio_url }}</a></p>
+      <a href="{% url 'hire_freelancer' freelancer.id %}">
+        <button class="btn btn-success mt-3">Hire Now</button>
+      </a>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about py-5">
+    <div class="container">
+      <h2 class="text-success">About Me</h2>
+      <p>{{ freelancer.bio }}</p>
+    </div>
+  </section>
+
+  <!-- Work Samples Section -->
+  <section class="work-samples py-5 bg-light">
+    <div class="container">
+      <h2 class="text-success">My Work Samples</h2>
+      {% if work_images %}
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for work_image in work_images %}
+        <div class="col">
+          <div class="card shadow-sm">
+            <img src="{{ work_image.image.url }}" class="card-img-top" alt="Work Image"
+              style="height: 220px; object-fit: cover; border-radius: 10px;" data-bs-toggle="modal"
+              data-bs-target="#workImageModal{{ forloop.counter }}">
+          </div>
         </div>
-        <div class="right">
-            <h1>{{ freelancer.name }}</h1>
-            <p class="category">{{ freelancer.category }} - {{ freelancer.subcategory }}</p>
-            <p><strong>Email:</strong> {{ freelancer.email }}</p>
-            <p><strong>Portfolio:</strong> <a href="{{ freelancer.portfolio_url }}" target="_blank">{{ freelancer.portfolio_url }}</a></p>
-            <a href="{% url 'hire_freelancer' freelancer.id %}">
-                <button class="hire-btn">Hire Now</button>
-            </a>
-        </div>
-    </section>
 
-    <section class="about">
-        <h2>About Me</h2>
-        <p>{{ freelancer.bio }}</p>
-    </section>
-
-    <section class="work-samples">
-        <h2>My Work Samples</h2>
-        {% if work_images %}
-            <div class="gallery">
-                {% for work_image in work_images %}
-                    <div class="gallery-item">
-                        <img src="{{ work_image.image.url }}" alt="Work Image">
-                    </div>
-                {% endfor %}
+        <!-- Modal -->
+        <div class="modal fade" id="workImageModal{{ forloop.counter }}" tabindex="-1"
+          aria-labelledby="workImageModalLabel{{ forloop.counter }}" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <img src="{{ work_image.image.url }}" class="img-fluid" alt="Full Work Image">
+              </div>
             </div>
-        {% else %}
-            <p>No work samples uploaded yet.</p>
-        {% endif %}
-    </section>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p>No work samples uploaded yet.</p>
+      {% endif %}
+    </div>
+  </section>
 
-    <footer>
-        <p>&copy; 2025 HireTalent. Helping freelancers connect and grow.</p>
-    </footer>
+  <!-- Footer -->
+  <footer class="text-white pt-5 pb-4" style="background-color: #0c3f27;">
+    <div class="container">
+      <div class="row">
+
+        <!-- About Us -->
+        <div class="col-md-3 mb-3">
+          <h5>About Us</h5>
+          <p>HireTalent connects skilled freelancers with clients worldwide. Build your brand or hire top
+            professionals easily.</p>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="col-md-3 mb-3">
+          <h5>Quick Links</h5>
+          <ul class="list-unstyled">
+            <li><a href="{% url 'home' %}" class="text-white text-decoration-none">Home</a></li>
+            <li><a href="{% url 'my_account' %}" class="text-white text-decoration-none">My Account</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Privacy Policy</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Terms & Conditions</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact Us -->
+        <div class="col-md-3 mb-3">
+          <h5>Contact Us</h5>
+          <p>Email: support@hiretalent.com</p>
+          <p>Phone: +1 234 567 890</p>
+        </div>
+
+        <!-- Follow Us -->
+        <div class="col-md-3 mb-3">
+          <h5>Follow Us</h5>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-white text-decoration-none">Facebook</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Twitter</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Instagram</a></li>
+            <li><a href="#" class="text-white text-decoration-none">LinkedIn</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Bottom Line -->
+      <div class="text-center mt-4">
+        <p class="mb-0">&copy; 2025 HireTalent.com | All Rights Reserved</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

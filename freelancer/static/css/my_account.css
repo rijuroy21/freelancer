@@ -1,11 +1,10 @@
-/* Reset */
+/* Reset
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Base Styling */
 body {
     font-family: 'Segoe UI', sans-serif;
     background-color: #f7f9fc;
@@ -22,7 +21,7 @@ a:hover {
     text-decoration: underline;
 }
 
-/* Navbar */
+
 .navbar {
     background-color: #222;
     padding: 15px 30px;
@@ -55,7 +54,7 @@ a:hover {
     color: #145c41;
 }
 
-/* Hero Section */
+
 .hero {
     text-align: center;
     background-color: #0c3f27;
@@ -63,14 +62,13 @@ a:hover {
     padding: 60px 20px;
 }
 
-/* Main Content */
 .content {
     max-width: 1100px;
     margin: 40px auto;
     padding: 0 20px;
 }
 
-/* Profile Card */
+
 .profile-card {
     display: flex;
     gap: 30px;
@@ -103,7 +101,7 @@ a:hover {
     margin-bottom: 15px;
 }
 
-/* Upload Form */
+
 .upload-form {
     margin-top: 10px;
     display: flex;
@@ -131,7 +129,7 @@ a:hover {
     background: #145c41;
 }
 
-/* Gallery */
+
 .gallery-section h2 {
     margin-bottom: 15px;
 }
@@ -164,7 +162,6 @@ a:hover {
     cursor: pointer;
 }
 
-/* Edit Section */
 .edit-section h2 {
     margin-bottom: 15px;
 }
@@ -200,11 +197,11 @@ a:hover {
     background: #145c41;
 }
 
-/* Footer */
+
 footer {
     text-align: center;
     padding: 30px;
     background-color: #222;
     color: white;
     font-size: 14px;
-}
+} */

@@ -4,123 +4,191 @@
 <head>
     {% load static %}
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>All Freelancers - HireTalent</title>
-    <link rel="stylesheet" href="{% static 'css/all_freelancers.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin-top: 0;
+        }
+
+        header {
+            margin-top: 0;
+        }
+
+        /* Custom 5-column layout */
+        @media (min-width: 1200px) {
+            .col-xl-5th {
+                flex: 0 0 auto;
+                width: 20%;
+            }
+        }
+
+        /* Align Apply Filters button */
+        .filter-btn {
+            align-self: end;
+            height: 38px;
+        }
+    </style>
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100 bg-light text-dark">
 
-    <nav class="navbar">
-        <div class="logo">HireTalent</div>
-        <ul class="nav-links">
-            <li><a href="{% url 'home' %}">Home</a></li>
-            {% if user.is_authenticated %}
-                <li><a href="{% url 'my_account' %}">My Account</a></li>
-                <li><a href="{% url 'logout' %}">Logout</a></li>
-            {% else %}
-                <a href="{% url 'join' %}"><button class="join-btn">Join</button></a>
-            {% endif %}
-        </ul>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #0c3f27;">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold fs-4" href="#">HireTalent</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'home' %}">Home</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'my_account' %}">My Account</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a href="{% url 'join' %}" class="btn btn-success ms-2">Join</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
     </nav>
 
-    <header class="hero">
-        <h1>All Freelancers</h1>
-        <p>Browse the best freelancers in various categories.</p>
-
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Search freelancers...">
-            <button id="searchButton">Search</button>
+    <!-- Hero Section -->
+    <header class="py-5 text-center text-white" style="background-color: #0c3f27;">
+        <div class="container">
+            <h1 class="display-5">All Freelancers</h1>
+            <p class="lead">Browse the best freelancers in various categories.</p>
+            <form method="get" action="{% url 'search_results' %}" class="d-flex justify-content-center mt-4">
+                <input type="text" name="q" class="form-control w-50 me-2" placeholder="Search freelancers..." required>
+                <button type="submit" class="btn btn-success">Search</button>
+            </form>
         </div>
     </header>
 
     <!-- Filter Section -->
-    <section class="filter-section">
-        <form method="get" class="filter-form">
-            <label for="category">Category:</label>
-            <select name="category" id="category">
-                <option value="">All Categories</option>
-                {% for key, value in category_choices %}
-                    <option value="{{ key }}" {% if request.GET.category == key %}selected{% endif %}>{{ value }}</option>
-                {% endfor %}
-            </select>
+    <section class="py-5 bg-white text-center">
+        <div class="container">
+            <h2 class="mb-4">Filter Freelancers</h2>
+            <form method="get" class="d-flex flex-wrap justify-content-center gap-3">
+                <div class="form-group">
+                    <label for="category" class="form-label">Category:</label>
+                    <select name="category" id="category" class="form-select">
+                        <option value="">All Categories</option>
+                        {% for key, value in category_choices %}
+                        <option value="{{ key }}" {% if request.GET.category == key %}selected{% endif %}>{{ value }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-            <label for="sort">Sort By:</label>
-            <select name="sort" id="sort">
-                <option value="">Default</option>
-                <option value="name_asc" {% if request.GET.sort == 'name_asc' %}selected{% endif %}>Name A-Z</option>
-                <option value="name_desc" {% if request.GET.sort == 'name_desc' %}selected{% endif %}>Name Z-A</option>
-                <option value="latest" {% if request.GET.sort == 'latest' %}selected{% endif %}>Latest</option>
-                <option value="oldest" {% if request.GET.sort == 'oldest' %}selected{% endif %}>Oldest</option>
-            </select>
+                <div class="form-group">
+                    <label for="sort" class="form-label">Sort By:</label>
+                    <select name="sort" id="sort" class="form-select">
+                        <option value="">Default</option>
+                        <option value="name_asc" {% if request.GET.sort == 'name_asc' %}selected{% endif %}>Name A-Z</option>
+                        <option value="name_desc" {% if request.GET.sort == 'name_desc' %}selected{% endif %}>Name Z-A</option>
+                        <option value="latest" {% if request.GET.sort == 'latest' %}selected{% endif %}>Latest</option>
+                        <option value="oldest" {% if request.GET.sort == 'oldest' %}selected{% endif %}>Oldest</option>
+                    </select>
+                </div>
 
-            <button type="submit" class="apply-filter-btn">Apply Filters</button>
-        </form>
+                <button type="submit" class="btn btn-success filter-btn">Apply Filters</button>
+            </form>
+        </div>
     </section>
 
-    <main>
-        <section class="profiles-section">
-            <div class="profiles">
-                {% for freelancer in freelancers %}
-                    <div class="profile">
-                        {% if freelancer.image %}
-                            <img src="{{ freelancer.image.url }}" alt="{{ freelancer.name }}" class="profile-img">
-                        {% else %}
-                            <img src="{% static 'images/noprofile.png' %}" alt="Default Image" class="profile-img">
-                        {% endif %}
-                        <h3>{{ freelancer.name }}</h3>
-                        <p>{{ freelancer.subcategory }}</p>
-                        <a href="{% url 'profile' freelancer.id %}">
-                            <button class="view-profile-btn">View Profile</button>
-                        </a>
+    <!-- Freelancer Profiles -->
+    <main class="flex-grow-1">
+        <section class="py-5 bg-white">
+            <div class="container">
+                <div class="row justify-content-center g-4">
+                    {% for freelancer in freelancers %}
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-th">
+                        <div class="card border shadow-sm h-100">
+                            {% if freelancer.image %}
+                            <img src="{{ freelancer.image.url }}" alt="{{ freelancer.name }}"
+                                class="card-img-top rounded-circle mx-auto mt-4"
+                                style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #198754;">
+                            {% else %}
+                            <img src="{% static 'images/noprofile.png' %}" alt="Default Image"
+                                class="card-img-top rounded-circle mx-auto mt-4"
+                                style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #198754;">
+                            {% endif %}
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ freelancer.name }}</h5>
+                                <p class="card-text">{{ freelancer.subcategory }}</p>
+                                <a href="{% url 'profile' freelancer.id %}" class="btn btn-success">View Profile</a>
+                            </div>
+                        </div>
                     </div>
-                {% empty %}
+                    {% empty %}
                     <p>No freelancers found.</p>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
         </section>
     </main>
 
-    <footer>
-        <p>&copy; 2025 HireTalent. Find the best professionals today!</p>
-    </footer>
+   
+  <!-- Footer -->
+<footer class="text-white pt-5 pb-4" style="background-color: #0c3f27;">
+  <div class="container">
+    <div class="row">
+      
+      <!-- About Us -->
+      <div class="col-md-3 mb-3">
+        <h5>About Us</h5>
+        <p>HireTalent connects skilled freelancers with clients worldwide. Build your brand or hire top professionals easily.</p>
+      </div>
+      
+      <!-- Quick Links -->
+      <div class="col-md-3 mb-3">
+        <h5>Quick Links</h5>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'home' %}" class="text-white text-decoration-none">Home</a></li>
+          <li><a href="{% url 'my_account' %}" class="text-white text-decoration-none">My Account</a></li>
+          <li><a href="#" class="text-white text-decoration-none">Privacy Policy</a></li>
+          <li><a href="#" class="text-white text-decoration-none">Terms & Conditions</a></li>
+        </ul>
+      </div>
 
-    <script>
-        function performSearch() {
-            let query = document.getElementById("searchInput").value.toLowerCase();
-            let profiles = document.querySelectorAll(".profile");
-            let found = false;
+      <!-- Contact Us -->
+      <div class="col-md-3 mb-3">
+        <h5>Contact Us</h5>
+        <p>Email: support@hiretalent.com</p>
+        <p>Phone: +1 234 567 890</p>
+      </div>
 
-            profiles.forEach(profile => {
-                let text = profile.innerText.toLowerCase();
-                profile.style.display = text.includes(query) ? "block" : "none";
-                if (text.includes(query)) found = true;
-            });
+      <!-- Follow Us -->
+      <div class="col-md-3 mb-3">
+        <h5>Follow Us</h5>
+        <ul class="list-unstyled">
+          <li><a href="#" class="text-white text-decoration-none">Facebook</a></li>
+          <li><a href="#" class="text-white text-decoration-none">Twitter</a></li>
+          <li><a href="#" class="text-white text-decoration-none">Instagram</a></li>
+          <li><a href="#" class="text-white text-decoration-none">LinkedIn</a></li>
+        </ul>
+      </div>
 
-            let noResults = document.getElementById("noResultsMessage");
+    </div>
 
-            if (!found) {
-                if (!noResults) {
-                    noResults = document.createElement("p");
-                    noResults.id = "noResultsMessage";
-                    noResults.textContent = "No results found.";
-                    noResults.style.color = "red";
-                    document.querySelector(".profiles").appendChild(noResults);
-                }
-            } else if (noResults) {
-                noResults.remove();
-            }
-        }
+    <!-- Bottom Line -->
+    <div class="text-center mt-4">
+      <p class="mb-0">&copy; 2025 HireTalent.com | All Rights Reserved</p>
+    </div>
+  </div>
+</footer>
 
-        document.getElementById("searchButton").addEventListener("click", performSearch);
-
-        document.getElementById("searchInput").addEventListener("keypress", function (event) {
-            if (event.key === "Enter") {
-                performSearch();
-            }
-        });
-    </script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

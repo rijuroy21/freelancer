@@ -1,136 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Join as a Freelancer - HireTalent</title>
-    <link rel="stylesheet" href="{% static 'css/join.css' %}">
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Join as a Freelancer - HireTalent</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
 
-    <nav class="navbar">
-        <div class="logo">HireTalent</div>
-        <ul class="nav-links">
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'categories' %}">Categories</a></li>
-            <li><a href="{% url 'my_account' %}">My Account</a></li>
-            <li><a href="{% url 'logout' %}">Logout</a></li>
+<body class="bg-light">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #0c3f27;">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold fs-4" href="#">HireTalent</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link active" href="{% url 'home' %}">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'my_account' %}">My Account</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
         </ul>
-    </nav>
+      </div>
+    </div>
+  </nav>
 
-    <header class="hero">
-        <h1>Join as a Freelancer</h1>
-        <p>Showcase your skills and connect with clients worldwide.</p>
-    </header>
-    <section class="freelancer-form">
-        <h2>Register as a Freelancer</h2>
-        <form action="{% url 'join' %}" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            
-            <label for="name">Full Name:</label>
-            <input type="text" id="name" name="name" required>
-    
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-    
-            <label for="category">Select Category:</label>
-            <select id="category" name="category" required>
-                <option value="">-- Select a Category --</option>
-                <option value="UI/UX & Web Designers">UI/UX & Web Designers</option>
-                <option value="Graphic & Visual Designers">Graphic & Visual Designers</option>
-                <option value="Digital & Marketing Designers">Digital & Marketing Designers</option>
-                <option value="Multimedia & Video Designers">Multimedia & Video Designers</option>
-                <option value="Industrial & Product Designers">Industrial & Product Designers</option>
-            </select>
-    
-            <label for="subcategory">Select Subcategory:</label>
-            <select id="subcategory" name="subcategory" required>
-                <option value="">-- Select a Subcategory --</option>
-            </select>
-    
-            <label for="portfolio">Portfolio URL:</label>
-            <input type="url" id="portfolio" name="portfolio">
-    
-            <label for="bio">Short Bio:</label>
-            <textarea id="bio" name="bio" rows="4" required></textarea>
-    
-            <label for="image">Profile Image:</label>
-            <input type="file" id="image" name="image" accept="image/*">
-    
-            <label for="work_images">Upload Work Images:</label>
-            <div id="image-input-container">
-                <div class="image-input-container">
-                    <input type="file" id="work_images_1" name="work_images" accept="image/*">
-                    <button type="button" class="remove-btn" onclick="removeImageInput(this)">Remove</button>
-                </div>
+  <!-- Hero Section -->
+  <header class="py-5 text-white text-center" style="margin-top: 56px; background-color: #0c3f27;">
+    <div class="container">
+      <h1 class="display-5">Join as a Freelancer</h1>
+      <p class="lead">Showcase your skills and connect with clients worldwide.</p>
+    </div>
+  </header>
+
+  <!-- Freelancer Form -->
+  <section class="container my-5">
+    <div class="bg-white p-5 rounded shadow-sm">
+      <h2 class="text-success mb-4">Register as a Freelancer</h2>
+      <form action="{% url 'join' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="mb-3">
+          <label for="name" class="form-label">Full Name</label>
+          <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="category" class="form-label">Select Category</label>
+          <select class="form-select" id="category" name="category" required>
+            <option value="">-- Select a Category --</option>
+            <option value="UI/UX & Web Designers">UI/UX & Web Designers</option>
+            <option value="Graphic & Visual Designers">Graphic & Visual Designers</option>
+            <option value="Digital & Marketing Designers">Digital & Marketing Designers</option>
+            <option value="Multimedia & Video Designers">Multimedia & Video Designers</option>
+            <option value="Industrial & Product Designers">Industrial & Product Designers</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="subcategory" class="form-label">Select Subcategory</label>
+          <select class="form-select" id="subcategory" name="subcategory" required>
+            <option value="">-- Select a Subcategory --</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="portfolio" class="form-label">Portfolio URL</label>
+          <input type="url" class="form-control" id="portfolio" name="portfolio">
+        </div>
+
+        <div class="mb-3">
+          <label for="bio" class="form-label">Short Bio</label>
+          <textarea class="form-control" id="bio" name="bio" rows="4" required></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="image" class="form-label">Profile Image</label>
+          <input type="file" class="form-control" id="image" name="image" accept="image/*">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Upload Work Images</label>
+          <div id="image-input-container">
+            <div class="d-flex align-items-center mb-2 image-input-container">
+              <input type="file" class="form-control me-2" id="work_images_1" name="work_images" accept="image/*">
+              <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeImageInput(this)">Remove</button>
             </div>
-            <button type="button" id="add-image-btn">+</button>
-    
-            <button type="submit">Join Now</button>
-        </form>
-    </section>
-    
+          </div>
+          <button type="button" class="btn btn-outline-secondary btn-sm mt-2" id="add-image-btn">Add More</button>
+        </div>
 
+        <button type="submit" class="btn btn-success mt-3">Join Now</button>
+      </form>
+    </div>
+  </section>
 
-    <footer>
-        <p>&copy; 2025 HireTalent. Connect with clients and grow your career.</p>
-    </footer>
+  <!-- Footer -->
+  <footer class="text-white pt-5 pb-4" style="background-color: #0c3f27;">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3 mb-3">
+          <h5>About Us</h5>
+          <p>HireTalent connects skilled freelancers with clients worldwide. Build your brand or hire top professionals easily.</p>
+        </div>
+        <div class="col-md-3 mb-3">
+          <h5>Quick Links</h5>
+          <ul class="list-unstyled">
+            <li><a href="{% url 'home' %}" class="text-white text-decoration-none">Home</a></li>
+            <li><a href="{% url 'my_account' %}" class="text-white text-decoration-none">My Account</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Privacy Policy</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Terms & Conditions</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3 mb-3">
+          <h5>Contact Us</h5>
+          <p>Email: support@hiretalent.com</p>
+          <p>Phone: +1 234 567 890</p>
+        </div>
+        <div class="col-md-3 mb-3">
+          <h5>Follow Us</h5>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-white text-decoration-none">Facebook</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Twitter</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Instagram</a></li>
+            <li><a href="#" class="text-white text-decoration-none">LinkedIn</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <p class="mb-0">&copy; 2025 HireTalent.com | All Rights Reserved</p>
+      </div>
+    </div>
+  </footer>
 
-    <script>
-        document.getElementById('category').addEventListener('change', function () {
-            const subcategoryDropdown = document.getElementById('subcategory');
-            subcategoryDropdown.innerHTML = '<option value="">-- Select a Subcategory --</option>'; // Reset subcategory options
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-            const subcategories = {
-                "UI/UX & Web Designers": ["UI/UX Designer", "Web Designer", "Mobile App Designer", "Wireframe & Prototype Designer"],
-                "Graphic & Visual Designers": ["Graphic Designer", "Illustrator", "Logo & Brand Identity Designer", "Print Designer", "Typography Designer", "Packaging Designer"],
-                "Digital & Marketing Designers": ["Social Media Designer", "Motion Graphics Designer", "Infographic Designer", "Email Template Designer", "Advertising Designer"],
-                "Multimedia & Video Designers": ["Video Editor", "3D Designer", "Game UI/UX Designer", "VR/AR Designer"],
-                "Industrial & Product Designers": ["Product Designer", "Interior Designer", "Fashion Designer", "Jewelry Designer"]
-            };
+  <!-- JS: Dynamic Subcategory & Work Image Upload -->
+  <script>
+    document.getElementById('category').addEventListener('change', function () {
+      const subcategoryDropdown = document.getElementById('subcategory');
+      subcategoryDropdown.innerHTML = '<option value="">-- Select a Subcategory --</option>';
 
-            const selectedCategory = this.value;
-            if (selectedCategory && subcategories[selectedCategory]) {
-                subcategories[selectedCategory].forEach(sub => {
-                    let option = document.createElement('option');
-                    option.value = sub;
-                    option.textContent = sub;
-                    subcategoryDropdown.appendChild(option);
-                });
-            }
+      const subcategories = {
+        "UI/UX & Web Designers": ["UI/UX Designer", "Web Designer", "Mobile App Designer", "Wireframe & Prototype Designer"],
+        "Graphic & Visual Designers": ["Graphic Designer", "Illustrator", "Logo & Brand Identity Designer", "Print Designer", "Typography Designer", "Packaging Designer"],
+        "Digital & Marketing Designers": ["Social Media Designer", "Motion Graphics Designer", "Infographic Designer", "Email Template Designer", "Advertising Designer"],
+        "Multimedia & Video Designers": ["Video Editor", "3D Designer", "Game UI/UX Designer", "VR/AR Designer"],
+        "Industrial & Product Designers": ["Product Designer", "Interior Designer", "Fashion Designer", "Jewelry Designer"]
+      };
+
+      const selectedCategory = this.value;
+      if (selectedCategory && subcategories[selectedCategory]) {
+        subcategories[selectedCategory].forEach(sub => {
+          let option = document.createElement('option');
+          option.value = sub;
+          option.textContent = sub;
+          subcategoryDropdown.appendChild(option);
         });
+      }
+    });
 
-        
-        let imageInputCount = 1;
-        
-        document.getElementById('add-image-btn').addEventListener('click', function () {
-            imageInputCount++;  
-            const newInputContainer = document.createElement('div');
-            newInputContainer.classList.add('image-input-container');
+    let imageInputCount = 1;
+    document.getElementById('add-image-btn').addEventListener('click', function () {
+      imageInputCount++;
+      const container = document.createElement('div');
+      container.classList.add('d-flex', 'align-items-center', 'mb-2', 'image-input-container');
 
-            const newInput = document.createElement('input');
-            newInput.type = 'file';
-            newInput.id = 'work_images_' + imageInputCount;
-            newInput.name = 'work_images';
-            newInput.accept = 'image/*';
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.classList.add('form-control', 'me-2');
+      input.name = 'work_images';
+      input.id = 'work_images_' + imageInputCount;
+      input.accept = 'image/*';
 
-            const removeButton = document.createElement('button');
-            removeButton.type = 'button';
-            removeButton.classList.add('remove-btn');
-            removeButton.textContent = 'Remove';
-            removeButton.setAttribute('onclick', 'removeImageInput(this)');
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'btn btn-outline-danger btn-sm';
+      removeBtn.textContent = 'Remove';
+      removeBtn.onclick = function () {
+        container.remove();
+      };
 
-            newInputContainer.appendChild(newInput);
-            newInputContainer.appendChild(removeButton);
-            document.getElementById('image-input-container').appendChild(newInputContainer);
-        });
+      container.appendChild(input);
+      container.appendChild(removeBtn);
+      document.getElementById('image-input-container').appendChild(container);
+    });
 
-
-        function removeImageInput(button) {
-            button.parentElement.remove();  
-        }
-    </script>
+    function removeImageInput(button) {
+      button.parentElement.remove();
+    }
+  </script>
 
 </body>
 </html>

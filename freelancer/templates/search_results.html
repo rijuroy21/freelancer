@@ -4,17 +4,11 @@
   {% load static %}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hire Designers</title>
+  <title>Search Results</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
       margin-top: 0; /* Ensure there's no extra margin at the top */
-    }
-    .category-card {
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
     header {
       margin-top: 0; /* Ensure there's no margin between navbar and header */
@@ -33,7 +27,7 @@
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link active" href="#">Home</a>
+            <a class="nav-link" href="{% url 'home' %}">Home</a>
           </li>
           {% if user.is_authenticated %}
             <li class="nav-item">
@@ -55,71 +49,54 @@
   <!-- Hero Section -->
   <header class="py-5 text-center text-white" style="background-color: #0c3f27;">
     <div class="container">
-      <h1 class="display-5">Find the Best Designers</h1>
-      <p class="lead">Connect with top talent to bring your ideas to life.</p>
+      <h1 class="display-5">Search Results</h1>
+      <p class="lead">Search Results for "{{ query }}"</p>
       <form action="{% url 'search_results' %}" method="get" class="d-flex justify-content-center mt-4">
-        <input type="text" name="q" class="form-control w-50 me-2" placeholder="Search for any service..." required>
+        <input type="text" name="q" class="form-control w-50 me-2" placeholder="Search for freelancers..." required>
         <button type="submit" class="btn btn-success">Search</button>
       </form>
     </div>
   </header>
+  
 
   <!-- Main Content -->
   <main class="flex-grow-1">
 
-    <!-- Explore Categories -->
-    <section class="py-5 bg-white text-center">
-      <div class="container">
-        <h2 class="mb-4">Explore Categories</h2>
-        <div class="row justify-content-center g-3">
-          {% for category in categories %}
-            <div class="col-6 col-md-4 col-lg-2">
-              <div class="category-card bg-success text-white rounded-pill">
-                <a href="{% url 'category_detail' category.id %}" class="text-white text-decoration-none w-100">{{ category.name }}</a>
-              </div>
-            </div>
-          {% empty %}
-            <p>No categories found.</p>
-          {% endfor %}
-        </div>
-      </div>
-    </section>
-
-    <!-- Featured Professionals -->
     <section class="py-5 text-center bg-white">
       <div class="container">
-        <h2 class="mb-5">Featured Professionals</h2>
-        <div class="row justify-content-center g-4">
-          {% for freelancer in freelancers %}
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-              <div class="card border shadow-sm h-100">
-                {% if freelancer.image %}
-                  <img src="{{ freelancer.image.url }}" alt="{{ freelancer.name }}" class="card-img-top rounded-circle mx-auto mt-4" style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #198754;">
-                {% else %}
-                  <img src="{% static 'images/noprofile.png' %}" alt="Default Image" class="card-img-top rounded-circle mx-auto mt-4" style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #198754;">
-                {% endif %}
-                <div class="card-body">
-                  <h5 class="card-title">{{ freelancer.name }}</h5>
-                  <p class="card-text">{{ freelancer.subcategory }}</p>
-                  <a href="{% url 'profile' freelancer.id %}" class="btn btn-success">View Profile</a>
+
+        {% if freelancers %}
+          <div class="row justify-content-center g-4">
+            {% for freelancer in freelancers %}
+              <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="card border shadow-sm h-100">
+                  {% if freelancer.image %}
+                    <img src="{{ freelancer.image.url }}" alt="{{ freelancer.name }}" class="card-img-top rounded-circle mx-auto mt-4" style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #198754;">
+                  {% else %}
+                    <img src="{% static 'images/noprofile.png' %}" alt="Default Image" class="card-img-top rounded-circle mx-auto mt-4" style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #198754;">
+                  {% endif %}
+                  <div class="card-body">
+                    <h5 class="card-title">{{ freelancer.name }}</h5>
+                    <p class="card-text">{{ freelancer.subcategory }}</p>
+                    <a href="{% url 'profile' freelancer.id %}" class="btn btn-success">View Profile</a>
+                  </div>
                 </div>
               </div>
-            </div>
-          {% empty %}
-            <p>No freelancers found.</p>
-          {% endfor %}
-        </div>
-
-        {% if freelancers|length >= 8 %}
-          <div class="mt-4">
-            <a href="{% url 'all_freelancers' %}" class="btn btn-success">Show More</a>
+            {% endfor %}
           </div>
+        {% else %}
+          <p class="text-danger">No results found.</p>
         {% endif %}
+
+        <div class="mt-4">
+          <a href="{% url 'home' %}" class="btn btn-success">← Back to Home</a>
+        </div>
       </div>
     </section>
 
   </main>
 
+ 
   <!-- Footer -->
 <footer class="text-white pt-5 pb-4" style="background-color: #0c3f27;">
   <div class="container">
@@ -168,7 +145,6 @@
     </div>
   </div>
 </footer>
-
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 

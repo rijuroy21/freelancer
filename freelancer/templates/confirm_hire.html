@@ -1,50 +1,138 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirm Hire - {{ freelancer.name }}</title>
-    <link rel="stylesheet" href="{% static 'css/confirm_hire.css' %}">
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Confirm Hire - {{ freelancer.name }}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100 bg-light text-dark">
 
-    <nav class="navbar">
-        <div class="logo">HireTalent</div>
-        <ul class="nav-links">
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'my_account' %}">My Account</a></li>
-            <li><a href="{% url 'logout' %}">Logout</a></li>
-        </ul>
-    </nav>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #0c3f27;">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold fs-4" href="#">HireTalent</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'home' %}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'my_account' %}">My Account</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
 
-    <h1>Hire Confirmation</h1>
-    <p>You are about to hire {{ freelancer.name }}.</p>
+<!-- Confirm Hire Hero Section -->
+<header class="py-5 text-center text-white" style="background-color: #0c3f27;">
+  <div class="container">
+    <h1 class="display-5">Finalize Your Hiring Decision</h1>
+    <p class="lead">Review the freelancer’s details and send a personalized message to confirm your collaboration.</p>
+  </div>
+</header>
+
+<!-- Content Section -->
+<main class="container py-5 mt-5">
+  <div class="bg-white rounded-3 shadow-sm p-4">
+    <h1 class="h4 mb-3 text-success">Hire Confirmation</h1>
+    <p class="mb-2">You are about to hire <strong>{{ freelancer.name }}</strong>.</p>
     <p><strong>Category:</strong> {{ freelancer.category }}</p>
     <p><strong>Subcategory:</strong> {{ freelancer.subcategory }}</p>
     <p><strong>Bio:</strong> {{ freelancer.bio }}</p>
-    <p><a href="{{ freelancer.portfolio_url }}" target="_blank">Portfolio URL</a></p>
+    <p><strong>Portfolio:</strong> <a href="{{ freelancer.portfolio_url }}" target="_blank">{{ freelancer.portfolio_url }}</a></p>
 
     {% if success %}
-        <p style="color: green;">Your message has been sent successfully!</p>
+      <div class="alert alert-success mt-3">Your message has been sent successfully!</div>
     {% endif %}
+  </div>
 
-    <section id="contact">
-        <div class="container1">
-            <div class="form-section">
-                <h2>Contact Me</h2>
-                <form method="post">
-                    {% csrf_token %}
-                    <input type="text" name="name" placeholder="Your Name" required>
-                    <input type="email" name="email" placeholder="Your Email" required>
-                    <input type="text" name="subject" placeholder="Subject">
-                    <textarea name="message" rows="5" placeholder="Message" required></textarea>
-                    <button type="submit">Send Message</button>
-                </form>
-            </div>
-        </div>
-    </section>
+  
 
+  <!-- Contact Form -->
+  <div class="bg-white rounded-3 shadow-sm p-4 mt-4">
+    <h2 class="h5 text-success">Contact Me</h2>
+    <form method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        <input type="text" name="name" class="form-control" placeholder="Your Name" required>
+      </div>
+      <div class="mb-3">
+        <input type="email" name="email" class="form-control" placeholder="Your Email" required>
+      </div>
+      <div class="mb-3">
+        <input type="text" name="subject" class="form-control" placeholder="Subject">
+      </div>
+      <div class="mb-3">
+        <textarea name="message" rows="5" class="form-control" placeholder="Message" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-success">Send Message</button>
+    </form>
+  </div>
+   <div class="text-center mt-5">
+    <a href="{% url 'profile' freelancer_id=freelancer.id %}" class="btn btn-outline-success">← Back to Profile</a>
+</div>
+
+</main>
+
+
+  <!-- Footer -->
+<footer class="text-white pt-5 pb-4" style="background-color: #0c3f27;">
+  <div class="container">
+    <div class="row">
+      
+      <!-- About Us -->
+      <div class="col-md-3 mb-3">
+        <h5>About Us</h5>
+        <p>HireTalent connects skilled freelancers with clients worldwide. Build your brand or hire top professionals easily.</p>
+      </div>
+      
+      <!-- Quick Links -->
+      <div class="col-md-3 mb-3">
+        <h5>Quick Links</h5>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'home' %}" class="text-white text-decoration-none">Home</a></li>
+          <li><a href="{% url 'my_account' %}" class="text-white text-decoration-none">My Account</a></li>
+          <li><a href="#" class="text-white text-decoration-none">Privacy Policy</a></li>
+          <li><a href="#" class="text-white text-decoration-none">Terms & Conditions</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact Us -->
+      <div class="col-md-3 mb-3">
+        <h5>Contact Us</h5>
+        <p>Email: support@hiretalent.com</p>
+        <p>Phone: +1 234 567 890</p>
+      </div>
+
+      <!-- Follow Us -->
+      <div class="col-md-3 mb-3">
+        <h5>Follow Us</h5>
+        <ul class="list-unstyled">
+          <li><a href="#" class="text-white text-decoration-none">Facebook</a></li>
+          <li><a href="#" class="text-white text-decoration-none">Twitter</a></li>
+          <li><a href="#" class="text-white text-decoration-none">Instagram</a></li>
+          <li><a href="#" class="text-white text-decoration-none">LinkedIn</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Bottom Line -->
+    <div class="text-center mt-4">
+      <p class="mb-0">&copy; 2025 HireTalent.com | All Rights Reserved</p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -20,5 +20,6 @@ urlpatterns = [
     path('freelancers/', views.all_freelancers, name='all_freelancers'),
     path('delete-profile-image/', views.delete_profile_image, name='delete_profile_image'),
     path('delete-work-image/<int:image_id>/', views.delete_work_image, name='delete_work_image'),
+    path('search/', views.search_results, name='search_results'),
     
 ]
