@@ -38,7 +38,6 @@ class Freelancer(models.Model):
         return f"{self.name} - {self.subcategory}"
 
 
-
 class WorkImage(models.Model):
     freelancer = models.ForeignKey(Freelancer, on_delete=models.CASCADE, related_name='work_images')
     image = models.ImageField(upload_to='work_samples/')
@@ -46,3 +45,14 @@ class WorkImage(models.Model):
 
     def __str__(self):
         return f"Image by {self.freelancer.name}"
+
+
+class Review(models.Model):
+    freelancer = models.ForeignKey(Freelancer, on_delete=models.CASCADE, related_name='reviews')
+    client_name = models.CharField(max_length=255)
+    rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)]) 
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.client_name}'s review for {self.freelancer.name}"

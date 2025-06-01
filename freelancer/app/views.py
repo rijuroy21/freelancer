@@ -6,23 +6,46 @@ from django.core.mail import send_mail
 import random
 from django.db.models.functions import Lower
 from django.conf import settings
+import re
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+from .models import Freelancer, Review
 
 
 from .models import *
 from .forms import RegisterForm, FreelancerEditForm
 
 
+
+
+def is_valid_password(password):
+    return (
+        len(password) >= 8 and
+        re.search(r"[A-Z]", password) and
+        re.search(r"\d", password) and
+        re.search(r"[!@#$%^&*(),.?\":{}|<>]", password)
+    )
+
 def register_view(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        email = request.POST['email']
+        username = request.POST['username'].strip()
+        email = request.POST['email'].strip()
         password = request.POST['password']
         confpassword = request.POST['confpassword']
 
+        # Password match
         if password != confpassword:
             messages.error(request, "Passwords do not match.")
             return redirect('register')
 
+        # Email format check
+        try:
+            validate_email(email)
+        except ValidationError:
+            messages.error(request, "Invalid email format.")
+            return redirect('register')
+
+        # Username/email uniqueness
         if User.objects.filter(username=username).exists():
             messages.error(request, "Username already exists.")
             return redirect('register')
@@ -31,6 +54,15 @@ def register_view(request):
             messages.error(request, "Email already in use.")
             return redirect('register')
 
+        # Password strength
+        if not is_valid_password(password):
+            messages.error(
+                request,
+                "Password must be at least 8 characters long, contain an uppercase letter, a number, and a special character."
+            )
+            return redirect('register')
+
+        # Success: create user
         user = User.objects.create_user(username=username, email=email, password=password)
         user.save()
         messages.success(request, "Registration successful. Please login.")
@@ -113,10 +145,13 @@ def reset_password(request):
 
 def home(request):
     categories = Category.objects.all()
-    freelancers = Freelancer.objects.order_by('-id')[:8] 
+    freelancers = Freelancer.objects.order_by('-id')[:8]
+    # Fetch the latest 15 work images
+    latest_work_images = WorkImage.objects.select_related('freelancer').order_by('-uploaded_at')[:12]
     return render(request, 'home.html', {
         'freelancers': freelancers,
-        'categories': categories
+        'categories': categories,
+        'latest_work_images': latest_work_images,
     })
 
 def all_freelancers(request):
@@ -309,3 +344,44 @@ def confirm_hire(request, freelancer_id):
         'freelancer': freelancer,
         'success': success
     })
+
+
+
+
+@login_required
+def submit_review(request, freelancer_id):
+    freelancer = get_object_or_404(Freelancer, id=freelancer_id)
+    
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        comment = request.POST.get('comment')
+        
+        # Validate rating and comment
+        if not rating or not comment:
+            messages.error(request, "Please provide both a rating and a comment.")
+            return redirect('profile', freelancer_id=freelancer.id)
+        
+        if len(comment) < 10:
+            messages.error(request, "Your review must be at least 10 characters long.")
+            return redirect('profile', freelancer_id=freelancer.id)
+
+        try:
+            rating = int(rating)
+            if rating < 1 or rating > 5:
+                messages.error(request, "Rating must be between 1 and 5 stars.")
+                return redirect('profile', freelancer_id=freelancer.id)
+        except ValueError:
+            messages.error(request, "Invalid rating value.")
+            return redirect('profile', freelancer_id=freelancer.id)
+
+        # Create the review
+        Review.objects.create(
+            freelancer=freelancer,
+            client_name=request.user.username,
+            rating=rating,
+            comment=comment
+        )
+        messages.success(request, "Your review has been submitted successfully.")
+        return redirect('profile', freelancer_id=freelancer.id)
+
+    return redirect('profile', freelancer_id=freelancer.id)

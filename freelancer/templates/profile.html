@@ -40,7 +40,6 @@
     </div>
   </nav>
 
-
   <!-- Hero Section -->
   <header class="py-5 text-center text-white" style="background-color: #0c3f27;">
     <div class="container">
@@ -48,7 +47,6 @@
       <p class="lead">Explore amazing opportunities and connect with clients looking for your skills.</p>
     </div>
   </header>
-
 
   <!-- Freelancer Header -->
   <section class="freelancer-header d-flex flex-wrap gap-3 mt-5 pt-5 mb-4 container bg-white rounded-3 shadow-sm p-4">
@@ -114,18 +112,80 @@
     </div>
   </section>
 
+  <!-- Reviews Section -->
+  <section class="reviews py-5">
+    <div class="container">
+      <h2 class="text-success mb-4">Reviews</h2>
+
+      <!-- Display Existing Reviews -->
+      {% if freelancer.reviews.all %}
+      <div class="mb-5">
+        {% for review in freelancer.reviews.all %}
+        <div class="review-item mb-3 p-3 bg-white rounded-3 shadow-sm">
+          <div class="d-flex align-items-center mb-2">
+            <div class="flex-grow-1">
+              <strong>{{ review.client_name }}</strong>
+              <span class="text-muted"> | {{ review.created_at|date:"F d, Y" }}</span>
+            </div>
+            <div>
+              {% for i in "12345" %}
+              <span class="text-warning">
+                {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
+              </span>
+              {% endfor %}
+            </div>
+          </div>
+          <p>{{ review.comment }}</p>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p>No reviews yet. Be the first to leave a review!</p>
+      {% endif %}
+
+      <!-- Review Submission Form -->
+      {% if user.is_authenticated %}
+      <div class="review-form bg-white p-4 rounded-3 shadow-sm">
+        <h4>Write Your Public Review</h4>
+        <p>Share as many details as you can about the freelancer and the final result, including: Professionalism of work, Long response time, and Lack of proactiveness. We value your honest feedback.</p>
+        <form method="POST" action="{% url 'submit_review' freelancer.id %}">
+          {% csrf_token %}
+          <div class="mb-3 d-flex align-items-center">
+            <div class="flex-grow-1">
+              <strong>{{ user.username }}</strong> 
+            </div>
+            <div class="star-rating">
+              <label for="rating" class="me-2">Rating:</label>
+              <select name="rating" id="rating" required>
+                <option value="" disabled selected>Select rating</option>
+                {% for i in "12345" %}
+                <option value="{{ forloop.counter }}">{{ forloop.counter }} Star{{ forloop.counter|pluralize }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="mb-3">
+            <textarea name="comment" class="form-control" rows="4" placeholder="Write your review here..." minlength="10" required></textarea>
+            <small class="text-muted">Write at least 10 characters</small>
+          </div>
+          <button type="submit" class="btn btn-success">Submit Review</button>
+        </form>
+      </div>
+      {% else %}
+      <p>Please <a href="{% url 'login' %}">log in</a> to leave a review.</p>
+      {% endif %}
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer class="text-white pt-5 pb-4" style="background-color: #0c3f27;">
     <div class="container">
       <div class="row">
-
         <!-- About Us -->
         <div class="col-md-3 mb-3">
           <h5>About Us</h5>
-          <p>HireTalent connects skilled freelancers with clients worldwide. Build your brand or hire top
-            professionals easily.</p>
+          <p>HireTalent connects skilled freelancers with clients worldwide. Build your brand or hire top professionals easily.</p>
         </div>
-
         <!-- Quick Links -->
         <div class="col-md-3 mb-3">
           <h5>Quick Links</h5>
@@ -136,14 +196,12 @@
             <li><a href="#" class="text-white text-decoration-none">Terms & Conditions</a></li>
           </ul>
         </div>
-
         <!-- Contact Us -->
         <div class="col-md-3 mb-3">
           <h5>Contact Us</h5>
           <p>Email: support@hiretalent.com</p>
           <p>Phone: +1 234 567 890</p>
         </div>
-
         <!-- Follow Us -->
         <div class="col-md-3 mb-3">
           <h5>Follow Us</h5>
@@ -154,12 +212,10 @@
             <li><a href="#" class="text-white text-decoration-none">LinkedIn</a></li>
           </ul>
         </div>
-
       </div>
-
       <!-- Bottom Line -->
       <div class="text-center mt-4">
-        <p class="mb-0">&copy; 2025 HireTalent.com | All Rights Reserved</p>
+        <p class="mb-0">© 2025 HireTalent.com | All Rights Reserved</p>
       </div>
     </div>
   </footer>
