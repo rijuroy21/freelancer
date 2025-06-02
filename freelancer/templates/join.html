@@ -40,9 +40,22 @@
   <section class="container my-5">
     <div class="bg-white p-5 rounded shadow-sm">
       <h2 class="text-success mb-4">Register as a Freelancer</h2>
+      {% if messages %}
+      <div class="alert alert-dismissible alert-warning">
+        {% for message in messages %}
+          <span>{{ message }}</span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        {% endfor %}
+      </div>
+      {% endif %}
       <form action="{% url 'join' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 
+        <div class="mb-3">
+          <label for="image" class="form-label">Profile Image</label>
+          <input type="file" class="form-control" id="image" name="image" accept="image/*">
+        </div>
+        
         <div class="mb-3">
           <label for="name" class="form-label">Full Name</label>
           <input type="text" class="form-control" id="name" name="name" required>
@@ -50,7 +63,7 @@
 
         <div class="mb-3">
           <label for="email" class="form-label">Email</label>
-          <input type="email" class="form-control" id="email" name="email" required>
+          <input type="email" class="form-control" id="email" name="email" value="{{ request.user.email }}" readonly>
         </div>
 
         <div class="mb-3">
@@ -58,7 +71,7 @@
           <select class="form-select" id="category" name="category" required>
             <option value="">-- Select a Category --</option>
             <option value="UI/UX & Web Designers">UI/UX & Web Designers</option>
-            <option value="Graphic & Visual Designers">Graphic & Visual Designers</option>
+            <option value="category" value="Graphic & Visual Designers">Graphic & Visual Designers</option>
             <option value="Digital & Marketing Designers">Digital & Marketing Designers</option>
             <option value="Multimedia & Video Designers">Multimedia & Video Designers</option>
             <option value="Industrial & Product Designers">Industrial & Product Designers</option>
@@ -74,17 +87,12 @@
 
         <div class="mb-3">
           <label for="portfolio" class="form-label">Portfolio URL</label>
-          <input type="url" class="form-control" id="portfolio" name="portfolio">
+          <input type="url" class="form-control" id="portfolio" name="portfolio" placeholder="(optional)">
         </div>
 
         <div class="mb-3">
           <label for="bio" class="form-label">Short Bio</label>
           <textarea class="form-control" id="bio" name="bio" rows="4" required></textarea>
-        </div>
-
-        <div class="mb-3">
-          <label for="image" class="form-label">Profile Image</label>
-          <input type="file" class="form-control" id="image" name="image" accept="image/*">
         </div>
 
         <div class="mb-3">
@@ -136,7 +144,7 @@
         </div>
       </div>
       <div class="text-center mt-4">
-        <p class="mb-0">&copy; 2025 HireTalent.com | All Rights Reserved</p>
+        <p class="mb-0">© 2025 HireTalent.com | All Rights Reserved</p>
       </div>
     </div>
   </footer>

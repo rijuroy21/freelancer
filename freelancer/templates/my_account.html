@@ -98,9 +98,11 @@
                 <p><strong>Email:</strong> {{ freelancer.email }}</p>
                 <p><strong>Category:</strong> {{ freelancer.category }}</p>
                 <p><strong>Subcategory:</strong> {{ freelancer.subcategory }}</p>
+                {% if freelancer.portfolio_url %}
                 <p><strong>Portfolio:</strong>
                     <a href="{{ freelancer.portfolio_url }}" target="_blank" class="link-success">View</a>
                 </p>
+                {% endif %}
                 <p><strong>Bio:</strong> {{ freelancer.bio }}</p>
             </div>
         </div>
@@ -167,13 +169,10 @@
     <footer class="text-white pt-5 pb-4" style="background-color: #0c3f27;">
         <div class="container">
             <div class="row">
-                <!-- About Us -->
                 <div class="col-md-3 mb-3">
                     <h5>About Us</h5>
                     <p>HireTalent connects skilled freelancers with clients worldwide. Build your brand or hire top professionals easily.</p>
                 </div>
-
-                <!-- Quick Links -->
                 <div class="col-md-3 mb-3">
                     <h5>Quick Links</h5>
                     <ul class="list-unstyled">
@@ -183,15 +182,11 @@
                         <li><a href="#" class="text-white text-decoration-none">Terms & Conditions</a></li>
                     </ul>
                 </div>
-
-                <!-- Contact Us -->
                 <div class="col-md-3 mb-3">
                     <h5>Contact Us</h5>
                     <p>Email: support@hiretalent.com</p>
                     <p>Phone: +1 234 567 890</p>
                 </div>
-
-                <!-- Follow Us -->
                 <div class="col-md-3 mb-3">
                     <h5>Follow Us</h5>
                     <ul class="list-unstyled">
@@ -202,8 +197,6 @@
                     </ul>
                 </div>
             </div>
-
-            <!-- Bottom Line -->
             <div class="text-center mt-4">
                 <p class="mb-0">© 2025 HireTalent.com | All Rights Reserved</p>
             </div>

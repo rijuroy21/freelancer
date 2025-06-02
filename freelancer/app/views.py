@@ -9,15 +9,8 @@ from django.conf import settings
 import re
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
-from .models import Freelancer, Review, WorkImage
-
-
-
-from .models import *
+from .models import Freelancer, Review, WorkImage, Category, SubCategory
 from .forms import RegisterForm, FreelancerEditForm
-
-
-
 
 def is_valid_password(password):
     return (
@@ -33,50 +26,37 @@ def register_view(request):
         email = request.POST['email'].strip()
         password = request.POST['password']
         confpassword = request.POST['confpassword']
-
-        # Password match
         if password != confpassword:
             messages.error(request, "Passwords do not match.")
             return redirect('register')
-
-        # Email format check
         try:
             validate_email(email)
         except ValidationError:
             messages.error(request, "Invalid email format.")
             return redirect('register')
-
-        # Username/email uniqueness
         if User.objects.filter(username=username).exists():
             messages.error(request, "Username already exists.")
             return redirect('register')
-
         if User.objects.filter(email=email).exists():
             messages.error(request, "Email already in use.")
             return redirect('register')
-
-        # Password strength
         if not is_valid_password(password):
             messages.error(
                 request,
                 "Password must be at least 8 characters long, contain an uppercase letter, a number, and a special character."
             )
             return redirect('register')
-
-        # Success: create user
         user = User.objects.create_user(username=username, email=email, password=password)
         user.save()
         messages.success(request, "Registration successful. Please login.")
         return redirect('login')
-
+    messages.get_messages(request).used = True
     return render(request, 'register.html')
-
 
 def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-
         user = auth.authenticate(username=username, password=password)
         if user is not None:
             auth.login(request, user)
@@ -84,23 +64,19 @@ def login_view(request):
         else:
             messages.error(request, "Invalid credentials")
             return redirect('login')
-
+    messages.get_messages(request).used = True
     return render(request, 'login.html')
-
 
 def logout_view(request):
     auth.logout(request)
     return redirect('login')
 
-
 def forgot_password_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         otp = random.randint(100000, 999999)
-
         request.session['reset_email'] = email
         request.session['otp'] = otp
-
         send_mail(
             subject='Your OTP Code',
             message=f'Your OTP is {otp}',
@@ -108,12 +84,9 @@ def forgot_password_view(request):
             recipient_list=[email],
             fail_silently=False,
         )
-
         messages.success(request, 'OTP has been sent to your email.')
         return redirect('verify_otp')
-
     return render(request, 'forgot_password.html')
-
 
 def verify_otp(request):
     if request.method == 'POST':
@@ -123,15 +96,12 @@ def verify_otp(request):
             return redirect('reset_password')
         else:
             messages.error(request, 'Invalid OTP. Please try again.')
-
     return render(request, 'verify_otp.html')
-
 
 def reset_password(request):
     if request.method == 'POST':
         new_password = request.POST.get('new_password')
         email = request.session.get('reset_email')
-
         user = User.objects.filter(email=email).first()
         if user:
             user.set_password(new_password)
@@ -141,13 +111,11 @@ def reset_password(request):
         else:
             messages.error(request, "Something went wrong. Please try again.")
             return redirect('forgot_password')
-
     return render(request, 'reset_password.html')
 
 def home(request):
     categories = Category.objects.all()
     freelancers = Freelancer.objects.order_by('-id')[:8]
-    # Fetch the latest 15 work images
     latest_work_images = WorkImage.objects.select_related('freelancer').order_by('-uploaded_at')[:12]
     return render(request, 'home.html', {
         'freelancers': freelancers,
@@ -159,10 +127,8 @@ def all_freelancers(request):
     freelancers = Freelancer.objects.all()
     category = request.GET.get('category')
     sort = request.GET.get('sort')
-
     if category:
         freelancers = freelancers.filter(category=category)
-
     if sort == 'name_asc':
         freelancers = freelancers.order_by(Lower('name'))
     elif sort == 'name_desc':
@@ -171,7 +137,6 @@ def all_freelancers(request):
         freelancers = freelancers.order_by('-created_at')
     elif sort == 'oldest':
         freelancers = freelancers.order_by('created_at')
-
     context = {
         'freelancers': freelancers,
         'category_choices': Freelancer.CATEGORY_CHOICES,
@@ -183,24 +148,29 @@ def categories(request):
     categories = Category.objects.all()
     return render(request, 'categories.html', {'categories': categories})
 
-
 @login_required
 def category_detail(request, category_id):
     category = get_object_or_404(Category, id=category_id)
     subcategories = category.subcategories.all()
     return render(request, 'category_detail.html', {'category': category, 'subcategories': subcategories})
 
-
 @login_required
 def subcategory_detail(request, subcategory_id):
     subcategory = get_object_or_404(SubCategory, id=subcategory_id)
     freelancers = subcategory.freelancers.all()
     return render(request, 'subcategory_detail.html', {'subcategory': subcategory, 'freelancers': freelancers})
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from .models import Freelancer, SubCategory, WorkImage
+
 @login_required
 def join(request):
+    if Freelancer.objects.filter(email__iexact=request.user.email).exists():
+        messages.error(request, 'You already have a freelancer profile.')
+        return redirect('my_account')
+
     if request.method == 'POST':
         name = request.POST.get('name')
-        email = request.POST.get('email')
         category = request.POST.get('category')
         subcategory_name = request.POST.get('subcategory')
         portfolio_url = request.POST.get('portfolio')
@@ -208,19 +178,14 @@ def join(request):
         profile_image = request.FILES.get('image')
         work_images = request.FILES.getlist('work_images')
 
-        try:
-            subcategory = SubCategory.objects.get(name=subcategory_name)
-        except SubCategory.DoesNotExist:
-            return render(request, 'join.html', {'error': 'Selected subcategory does not exist.'})
-
-        # Check if a freelancer with the same email already exists
-        if Freelancer.objects.filter(email=email).exists():
-            messages.error(request, 'A freelancer with this email already exists. Please use a different email address.')
-            return redirect('join')
+        subcategory = SubCategory.objects.filter(name=subcategory_name).first()
+        if not subcategory:
+            messages.error(request, 'Selected subcategory does not exist.')
+            return render(request, 'join.html')
 
         freelancer = Freelancer.objects.create(
             name=name,
-            email=email,
+            email=request.user.email,
             category=category,
             subcategory=subcategory,
             portfolio_url=portfolio_url,
@@ -236,14 +201,11 @@ def join(request):
 
     return render(request, 'join.html')
 
-
 @login_required
 def profile(request, freelancer_id):
     freelancer = get_object_or_404(Freelancer, id=freelancer_id)
     work_images = freelancer.work_images.all()
-    
     return render(request, 'profile.html', {'freelancer': freelancer, 'work_images': work_images})
-
 
 def search_results(request):
     query = request.GET.get('q')
@@ -256,32 +218,24 @@ def search_results(request):
         )
     return render(request, 'search_results.html', {'query': query, 'freelancers': freelancers})
 
-
-
-
 @login_required
 def my_account(request):
     freelancer = Freelancer.objects.filter(email__iexact=request.user.email).first()
-
     if not freelancer:
-        messages.error(request, "No freelancer profile found for this account. Please create one.")
-        return redirect('join')
 
+        return redirect('join')
     if request.method == 'POST':
         if 'profile_image' in request.FILES:
-            # Handle profile image upload
             freelancer.image = request.FILES['profile_image']
             freelancer.save()
             messages.success(request, 'Profile image uploaded successfully.')
             return redirect('my_account')
         elif 'work_image' in request.FILES:
-            # Handle work image upload
             image = request.FILES['work_image']
             WorkImage.objects.create(freelancer=freelancer, image=image)
             messages.success(request, 'Work image uploaded successfully.')
             return redirect('my_account')
         else:
-            # Handle profile edit form
             form = FreelancerEditForm(request.POST, request.FILES, instance=freelancer)
             if form.is_valid():
                 form.save()
@@ -291,7 +245,6 @@ def my_account(request):
                 messages.error(request, 'Please correct the errors below.')
     else:
         form = FreelancerEditForm(instance=freelancer)
-
     return render(request, 'my_account.html', {
         'form': form,
         'freelancer': freelancer
@@ -316,66 +269,50 @@ def delete_work_image(request, image_id):
     messages.success(request, "Work image deleted successfully.")
     return redirect('my_account')
 
-
 def hire_freelancer(request, freelancer_id):
     freelancer = get_object_or_404(Freelancer, pk=freelancer_id)
     return redirect('confirm_hire', freelancer_id=freelancer.id)
 
-
 def confirm_hire(request, freelancer_id):
     freelancer = get_object_or_404(Freelancer, pk=freelancer_id)
     success = False
-
     if request.method == 'POST':
         name = request.POST.get('name')
         email = request.POST.get('email')
         subject = request.POST.get('subject') or f"Hire Inquiry for {freelancer.name}"
         message = request.POST.get('message')
-
         full_message = f"""
         You have a new hire inquiry for {freelancer.name}.
-
         From: {name}
         Email: {email}
         Subject: {subject}
         Message:
         {message}
-
         Freelancer Info:
         Category: {freelancer.category}
         Subcategory: {freelancer.subcategory}
         Bio: {freelancer.bio}
         Portfolio: {freelancer.portfolio_url}
         """
-
         send_mail(subject, full_message, settings.EMAIL_HOST_USER, [settings.EMAIL_HOST_USER])
         success = True
-
     return render(request, 'confirm_hire.html', {
         'freelancer': freelancer,
         'success': success
     })
 
-
-
-
 @login_required
 def submit_review(request, freelancer_id):
     freelancer = get_object_or_404(Freelancer, id=freelancer_id)
-    
     if request.method == 'POST':
         rating = request.POST.get('rating')
         comment = request.POST.get('comment')
-        
-        # Validate rating and comment
         if not rating or not comment:
             messages.error(request, "Please provide both a rating and a comment.")
             return redirect('profile', freelancer_id=freelancer.id)
-        
         if len(comment) < 10:
             messages.error(request, "Your review must be at least 10 characters long.")
             return redirect('profile', freelancer_id=freelancer.id)
-
         try:
             rating = int(rating)
             if rating < 1 or rating > 5:
@@ -384,8 +321,6 @@ def submit_review(request, freelancer_id):
         except ValueError:
             messages.error(request, "Invalid rating value.")
             return redirect('profile', freelancer_id=freelancer.id)
-
-        # Create the review
         Review.objects.create(
             freelancer=freelancer,
             client_name=request.user.username,
@@ -394,28 +329,20 @@ def submit_review(request, freelancer_id):
         )
         messages.success(request, "Your review has been submitted successfully.")
         return redirect('profile', freelancer_id=freelancer.id)
-
     return redirect('profile', freelancer_id=freelancer.id)
-
 
 @login_required
 def delete_account(request):
     freelancer = Freelancer.objects.filter(email__iexact=request.user.email).first()
-    
     if request.method == 'POST':
         if freelancer:
-            # Delete associated work images
             for work_image in freelancer.work_images.all():
                 work_image.image.delete()
                 work_image.delete()
-            # Delete freelancer profile image
             if freelancer.image:
                 freelancer.image.delete()
-            # Delete freelancer profile
             freelancer.delete()
-        # Delete the user account
         request.user.delete()
         messages.success(request, "Your account has been deleted successfully.")
-        return redirect('login')
-    
+        return redirect('home')
     return render(request, 'delete_account.html', {'freelancer': freelancer})
