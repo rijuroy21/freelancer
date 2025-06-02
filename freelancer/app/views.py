@@ -9,7 +9,8 @@ from django.conf import settings
 import re
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
-from .models import Freelancer, Review
+from .models import Freelancer, Review, WorkImage
+
 
 
 from .models import *
@@ -256,6 +257,8 @@ def search_results(request):
     return render(request, 'search_results.html', {'query': query, 'freelancers': freelancers})
 
 
+
+
 @login_required
 def my_account(request):
     freelancer = Freelancer.objects.filter(email__iexact=request.user.email).first()
@@ -265,12 +268,20 @@ def my_account(request):
         return redirect('join')
 
     if request.method == 'POST':
-        if 'work_image' in request.FILES:
+        if 'profile_image' in request.FILES:
+            # Handle profile image upload
+            freelancer.image = request.FILES['profile_image']
+            freelancer.save()
+            messages.success(request, 'Profile image uploaded successfully.')
+            return redirect('my_account')
+        elif 'work_image' in request.FILES:
+            # Handle work image upload
             image = request.FILES['work_image']
             WorkImage.objects.create(freelancer=freelancer, image=image)
             messages.success(request, 'Work image uploaded successfully.')
             return redirect('my_account')
         else:
+            # Handle profile edit form
             form = FreelancerEditForm(request.POST, request.FILES, instance=freelancer)
             if form.is_valid():
                 form.save()
@@ -385,3 +396,26 @@ def submit_review(request, freelancer_id):
         return redirect('profile', freelancer_id=freelancer.id)
 
     return redirect('profile', freelancer_id=freelancer.id)
+
+
+@login_required
+def delete_account(request):
+    freelancer = Freelancer.objects.filter(email__iexact=request.user.email).first()
+    
+    if request.method == 'POST':
+        if freelancer:
+            # Delete associated work images
+            for work_image in freelancer.work_images.all():
+                work_image.image.delete()
+                work_image.delete()
+            # Delete freelancer profile image
+            if freelancer.image:
+                freelancer.image.delete()
+            # Delete freelancer profile
+            freelancer.delete()
+        # Delete the user account
+        request.user.delete()
+        messages.success(request, "Your account has been deleted successfully.")
+        return redirect('login')
+    
+    return render(request, 'delete_account.html', {'freelancer': freelancer})

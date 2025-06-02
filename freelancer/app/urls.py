@@ -15,6 +15,7 @@ urlpatterns = [
     path('join/', views.join, name='join'),
     path('profile/<int:freelancer_id>/', views.profile, name='profile'),
     path('my-account/', views.my_account, name='my_account'),
+    path('delete_account/', views.delete_account, name='delete_account'),
     path('hire/<int:freelancer_id>/', views.hire_freelancer, name='hire_freelancer'),
     path('confirm-hire/<int:freelancer_id>/', views.confirm_hire, name='confirm_hire'),
     path('freelancers/', views.all_freelancers, name='all_freelancers'),
