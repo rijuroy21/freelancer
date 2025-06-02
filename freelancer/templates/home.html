@@ -10,12 +10,6 @@
     body {
       margin-top: 0;
     }
-    .category-card {
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
     header {
       margin-top: 0;
     }
@@ -30,10 +24,11 @@
       height: 200px;
     }
     .work-sample-image {
-      border-radius: 10px;
-      object-fit: cover;
       width: 100%;
-      height: 200px;
+      height: auto;
+      object-fit: contain;
+      display: block;
+      border-radius: 10px;
     }
     .hiretalent-instant-image {
       border-radius: 15px;
@@ -43,13 +38,39 @@
     }
     .work-sample-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 15px;
     }
     .work-sample-item {
       width: 100%;
-      max-width: 250px;
       margin: 0 auto;
+      position: relative;
+    }
+    .work-sample-item .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      padding: 10px;
+      box-sizing: border-box;
+      border-radius: 10px;
+    }
+    .work-sample-item:hover .overlay {
+      opacity: 1;
+    }
+    .work-sample-item .overlay p {
+      margin: 0;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: left;
     }
     .guide-image {
       object-fit: cover;
@@ -68,18 +89,69 @@
       padding-left: 5%;
       padding-right: 5%;
     }
+    /* New styles for Explore Categories section */
+    .category-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+    .category-item {
+      background-color: #0c3f27; /* Updated to match the requested color */
+      border-radius: 15px;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+    .category-item:hover {
+      transform: scale(1.05); /* Slight zoom on hover */
+    }
+    .category-item a {
+      text-decoration: none;
+      color: white;
+      display: block;
+    }
+    .category-item .category-text {
+      padding: 15px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 500;
+    }
+    .category-item .category-image {
+      width: 100%;
+      height: 150px; /* Fixed height for consistency */
+      object-fit: cover; /* Ensure image fits without distortion */
+      background-color: #e0f0ed; /* Light background for image area */
+    }
     @media (max-width: 768px) {
       .work-sample-container {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(2, 1fr);
       }
       .work-sample-item {
-        max-width: 200px;
+        max-width: none;
       }
       .work-sample-image {
-        height: 150px;
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        border-radius: 10px;
+      }
+      .work-sample-item .overlay {
+        border-radius: 10px;
+      }
+      .work-sample-item .overlay p {
+        font-size: 12px;
       }
       .guide-image {
         height: 200px;
+      }
+      .category-container {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+      .category-item .category-text {
+        font-size: 16px;
+        padding: 10px;
+      }
+      .category-item .category-image {
+        height: 120px;
       }
     }
   </style>
@@ -132,14 +204,14 @@
 
     <!-- Explore Categories -->
     <section class="py-5 bg-white text-center">
-      <div class="container">
+      <div class="full-width-section">
         <h2 class="mb-4">Explore Categories</h2>
-        <div class="row justify-content-center g-3">
+        <div class="category-container">
           {% for category in categories %}
-            <div class="col-6 col-md-4 col-lg-2">
-              <div class="category-card bg-success text-white rounded-pill">
-                <a href="{% url 'category_detail' category.id %}" class="text-white text-decoration-none w-100">{{ category.name }}</a>
-              </div>
+            <div class="category-item">
+              <a href="{% url 'category_detail' category.id %}">
+                <div class="category-text">{{ category.name }}</div>
+              </a>
             </div>
           {% empty %}
             <p>No categories found.</p>
@@ -181,44 +253,21 @@
       </div>
     </section>
 
-   
-
-    <!-- Tips for Hiring Top Designers Section -->
-    <section class="py-5 bg-white">
-      <div class="full-width-section">
-        <h2 class="mb-5">Tips for Hiring Top Designers</h2>
-        <div class="row g-4">
-          <div class="col-md-4">
-            <div class="guide-card">
-              <img src="{% static 'images/cropped-shutterstock_445337599-1-1200x674-2.jpg' %}" alt="How to find the right designer for your project" class="guide-image">
-              <h5 class="mt-3">How to find the right designer for your project</h5>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="guide-card">
-              <img src="{% static 'images/pexels-photo-3182812.webp' %}" alt="Best practices for collaborating with freelancers" class="guide-image">
-              <h5 class="mt-3">Best practices for collaborating with freelancers</h5>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="guide-card">
-              <img src="{% static 'images/done-scaled-1-1024x536.jpg' %}" alt="Tips for managing design projects effectively" class="guide-image">
-              <h5 class="mt-3">Tips for managing design projects effectively</h5>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    
 
     <!-- Latest Work Samples Section -->
     <section class="py-5 text-center bg-white">
-      <div class="container">
+      <div class="full-width-section">
         <h2 class="mb-5">Latest Work Samples</h2>
         <div class="work-sample-container">
           {% for work_image in latest_work_images %}
             <div class="work-sample-item">
               <a href="{% url 'profile' work_image.freelancer.id %}">
                 <img src="{{ work_image.image.url }}" alt="Work Sample" class="work-sample-image">
+                <div class="overlay">
+                  <p>Featured in: {{ work_image.freelancer.subcategory }}</p>
+                  <p>by: {{ work_image.freelancer.name }}</p>
+                </div>
               </a>
             </div>
           {% empty %}
@@ -227,7 +276,8 @@
         </div>
       </div>
     </section>
-     <!-- Why Choose HireTalent? Section -->
+
+    <!-- Why Choose HireTalent? Section -->
     <section class="py-5 text-center bg-white">
       <div class="full-width-section section-padding">
         <h2 class="mb-5">Why Choose HireTalent?</h2>
@@ -251,6 +301,33 @@
             <div class="feature-icon mb-3">💸</div>
             <h5>Pay with Confidence</h5>
             <p>Release payment only when you’re completely satisfied with the work.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tips for Hiring Top Designers Section -->
+    <section class="py-5 bg-white">
+      <div class="full-width-section">
+        <h2 class="mb-5">Tips for Hiring Top Designers</h2>
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="guide-card">
+              <img src="{% static 'images/cropped-shutterstock_445337599-1-1200x674-2.jpg' %}" alt="How to find the right designer for your project" class="guide-image">
+              <h5 class="mt-3">How to find the right designer for your project</h5>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="guide-card">
+              <img src="{% static 'images/pexels-photo-3182812.webp' %}" alt="Best practices for collaborating with freelancers" class="guide-image">
+              <h5 class="mt-3">Best practices for collaborating with freelancers</h5>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="guide-card">
+              <img src="{% static 'images/done-scaled-1-1024x536.jpg' %}" alt="Tips for managing design projects effectively" class="guide-image">
+              <h5 class="mt-3">Tips for managing design projects effectively</h5>
+            </div>
           </div>
         </div>
       </div>
